@@ -14,15 +14,17 @@ public class Game {
         this.map = map;
     }
 
-    public void keyInput() {
+    public static void processInput(String input) {
 
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Render r = new Render();
+        String input = null;
         while (true) {
-            
+            input = sc.nextLine();
+            processInput(input);
         }
     }
 }
