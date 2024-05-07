@@ -34,7 +34,7 @@ public class Game {
         Render r = new Render();
         Game game = new Game(null, null, null, r); //TODO
         String input = null;
-        r.loadPreset(0);
+        r.loadScreen(0);
         r.flush();
         while (true) {
             input = sc.nextLine();
