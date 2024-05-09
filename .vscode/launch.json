@@ -9,6 +9,20 @@
             "name": "Game",
             "request": "launch",
             "mainClass": "Game",
+            "projectName": "Final-Project-Java-CSA_322d0cb8"
+        },
+        {
+            "type": "java",
+            "name": "Render",
+            "request": "launch",
+            "mainClass": "Render",
+            "projectName": "Final-Project-Java-CSA_322d0cb8"
+        },
+        {
+            "type": "java",
+            "name": "Game",
+            "request": "launch",
+            "mainClass": "Game",
             "projectName": "Final-Project-Java-CSA_efa073e6"
         },
         {

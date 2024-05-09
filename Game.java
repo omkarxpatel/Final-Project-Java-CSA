@@ -5,7 +5,9 @@ public class Game {
     private Player player; 
     private Map map;
     private Render render; 
+    private int screen;
     private int selected;
+    private CursorPosition[] cursorPositions;
 
     public Game(Board board,
                 Player player,
@@ -16,17 +18,40 @@ public class Game {
         this.player = player;
         this.map = map;
         this.render = render;
-        selected = -1;
+        screen = 0;
+        selected = 0;
+        cursorPositions = Render.CURSOR_PAIRS[screen];
     }
 
-    public static void processInput(String input) {
+    public void processInput(String input) {
         //TODO
         switch (input) {
-            case "a": 
-            case "s":
-            case "d":
+            case "a": {
+                selected--;
+                if (selected < 0) selected = cursorPositions.length - 1;
+                render.displayCursor(screen, selected);
+                break;
+            }
+            case "d": {
+                selected++;
+                if (selected > cursorPositions.length - 1) selected = 0;
+                render.displayCursor(screen, selected);
+                break;
+            }
+            case "s": {
+
+            }
+            
             default: break;
         }
+    }
+
+    public void gotoScreen(int screenIndex) {
+        screen = screenIndex;
+        selected = 0;
+        render.loadScreen(screenIndex);
+        render.displayCursor(screen, selected);
+        render.flush();
     }
 
     public static void main(String[] args) {
@@ -34,11 +59,10 @@ public class Game {
         Render r = new Render();
         Game game = new Game(null, null, null, r); //TODO
         String input = null;
-        r.loadScreen(0);
         r.flush();
         while (true) {
             input = sc.nextLine();
-            processInput(input);
+            game.processInput(input);
             r.flush();
         }
     }
