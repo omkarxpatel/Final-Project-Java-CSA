@@ -3,19 +3,19 @@ import java.util.*;
 public class Card {
     private String name;
     private int health;
-    private int damage;
+    private int power;
     private int cost;
     private ArrayList<String> abilities;
     private String desc;
 
     public Card(String name,
             int health,
-            int damage,
+            int power,
             int cost,
             ArrayList<String> abilities,
             String desc) {
         this.health = health;
-        this.damage = damage;
+        this.power = power;
 
         this.abilities = abilities;
         this.desc = desc;
@@ -29,8 +29,8 @@ public class Card {
         return health;
     }
 
-    public int getDamage() {
-        return damage;
+    public int getPower() {
+        return power;
     }
 
     public int getCost() {
@@ -49,9 +49,9 @@ public class Card {
         health += modifier;
     }
 
-    public void attackCard(Card opponent, int cardDamage) {
-        opponent.modifyHealth(-cardDamage);
-        System.out.println(name + " has dealt " + String.valueOf(damage) + " damage to " + opponent.getName());
+    public void attackCard(Card opponent, int cardPower) {
+        opponent.modifyHealth(-cardPower);
+        System.out.println(name + " has dealt " + String.valueOf(power) + " damage to " + opponent.getName());
     }
 
     public void useAbility(Card opponent, String ability) {

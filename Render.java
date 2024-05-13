@@ -3,7 +3,7 @@ import java.lang.StringBuilder;
 import java.lang.StringBuffer;
 
 public class Render {
-    private String[] display = new String[15];
+    private String[] display = new String[20];
     private ArrayList<StringBuffer> displayBuffer = new ArrayList<StringBuffer>();
     private int currentScreen = 0;
     private int currentSelected = 0;
@@ -139,6 +139,49 @@ public class Render {
         currentScreen = screenIndex;
     }
 
+    public void displayCard(int posRow, 
+        int posCol, 
+        String name,
+        int health, 
+        int power, 
+        int cost,
+        ArrayList<String> abilities) {
+            String line = displayBuffer.get(posRow).toString();
+            line = replaceAt(posCol, posCol + 5, line, "┌───┐");
+            displayBuffer.set(posRow, new StringBuffer(line));
+
+            line = displayBuffer.get(posRow + 1).toString();
+            line = replaceAt(posCol, posCol + 5, line, "│ " + 
+                name.substring(0,1) + 
+                (cost == 0 ? " " : cost) + 
+                "│");
+            displayBuffer.set(posRow + 1, new StringBuffer(line));
+
+            line = displayBuffer.get(posRow + 2).toString();
+            line = replaceAt(posCol, posCol + 5, line, "├───┤");
+            displayBuffer.set(posRow + 2, new StringBuffer(line));
+
+            line = displayBuffer.get(posRow + 3).toString();
+            line = replaceAt(posCol, posCol + 5, line, "│" + health + " " + power + "│");
+            displayBuffer.set(posRow + 3, new StringBuffer(line));
+
+            line = displayBuffer.get(posRow + 4).toString();
+            line = replaceAt(posCol, posCol + 5, line, "└─" + 
+                (abilities.isEmpty() ? " " : abilities.get(0).substring(0,1)) + 
+                "─┘");
+            displayBuffer.set(posRow + 4, new StringBuffer(line));
+    }
+
+    public void displayCard(int posRow, int posCol, Card card) {
+        displayCard(posRow, 
+            posCol, 
+            card.getName(), 
+            card.getHealth(), 
+            card.getPower(), 
+            card.getCost(), 
+            card.getAbilities());
+    }
+
     public void flush() {
         for (int i = 0; i < display.length; i++) {
             display[i] = displayBuffer.get(i).toString();
@@ -158,12 +201,14 @@ public class Render {
 
     public static void main(String[] args) {
         Render r = new Render();
-        
-        r.colorText("\u001B[31m", 3, 22, 5, 39); // preset for inscrption
-        r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
-        r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
+        r.loadScreen(0);
+        r.loadScreen(1);
+        // r.colorText("\u001B[31m", 3, 22, 5, 39); // preset for inscrption
+        // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
+        // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
 
         r.flush();
+        System.out.println("\u001b[4mTest\u001b[0mTest");
     }
 
     private static String replaceAt(int startIndex, 

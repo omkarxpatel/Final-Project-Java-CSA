@@ -19,18 +19,18 @@ public class Board {
     public void update() {
         for (int j = 0; j < board[0].length; j++) {
             if (board[0][j] != null && board[1][j] != null) {
-                board[0][j].attackCard(board[1][j], board[0][j].getDamage());
+                board[0][j].attackCard(board[1][j], board[0][j].getPower());
             }
             if (board[0][j] != null && board[1][j] == null) {
-                health += board[0][j].getDamage();
+                health += board[0][j].getPower();
             }
         }
         for (int j = 0; j < board[0].length; j++) {
             if (board[1][j] != null && board[0][j] != null) {
-                board[1][j].attackCard(board[0][j], board[1][j].getDamage());
+                board[1][j].attackCard(board[0][j], board[1][j].getPower());
             }
             if (board[1][j] != null && board[0][j] == null) {
-                health -= board[1][j].getDamage();
+                health -= board[1][j].getPower();
             }
         }
     }
