@@ -3,7 +3,8 @@ import java.lang.StringBuilder;
 import java.lang.StringBuffer;
 
 public class Render {
-    private String[] display = new String[20];
+    private int maxLines = 20;
+    private String[] display = new String[maxLines];
     private ArrayList<StringBuffer> displayBuffer = new ArrayList<StringBuffer>();
     private int currentScreen = 0;
     private int currentSelected = 0;
@@ -75,8 +76,10 @@ public class Render {
             newLine.append(emptyChar);
         emptyLine = newLine.toString();
 
-        display = screenTitle;
         loadScreen(0);
+        for (int i = 0; i < displayBuffer.size(); i++) {
+            display[i] = displayBuffer.get(i).toString();
+        }
         currentScreen = 0;
         currentSelected = 0;
         displayCursor(currentScreen, currentSelected);
@@ -152,7 +155,7 @@ public class Render {
 
             line = displayBuffer.get(posRow + 1).toString();
             line = replaceAt(posCol, posCol + 5, line, "│ " + 
-                name.substring(0,1) + 
+                (name == null || name.equals("") ? " " :name.substring(0,1)) + 
                 (cost == 0 ? " " : cost) + 
                 "│");
             displayBuffer.set(posRow + 1, new StringBuffer(line));
@@ -162,13 +165,15 @@ public class Render {
             displayBuffer.set(posRow + 2, new StringBuffer(line));
 
             line = displayBuffer.get(posRow + 3).toString();
-            line = replaceAt(posCol, posCol + 5, line, "│" + health + " " + power + "│");
+            line = replaceAt(posCol, posCol + 5, line, "│" +
+                (health == 0 ? " " : health) + 
+                (abilities.isEmpty() ? " " : abilities.get(0).substring(0,1)) + 
+                (power == 0 ? " " : power) + 
+                "│");
             displayBuffer.set(posRow + 3, new StringBuffer(line));
 
             line = displayBuffer.get(posRow + 4).toString();
-            line = replaceAt(posCol, posCol + 5, line, "└─" + 
-                (abilities.isEmpty() ? " " : abilities.get(0).substring(0,1)) + 
-                "─┘");
+            line = replaceAt(posCol, posCol + 5, line, "└───┘");
             displayBuffer.set(posRow + 4, new StringBuffer(line));
     }
 
@@ -183,11 +188,11 @@ public class Render {
     }
 
     public void flush() {
-        for (int i = 0; i < display.length; i++) {
+        for (int i = 0; i < displayBuffer.size(); i++) {
             display[i] = displayBuffer.get(i).toString();
         }
         for (String s : display) {
-            System.out.println(s);
+            if (s != null) System.out.println(s);
         }
     }
 
@@ -201,14 +206,13 @@ public class Render {
 
     public static void main(String[] args) {
         Render r = new Render();
-        r.loadScreen(0);
         r.loadScreen(1);
         // r.colorText("\u001B[31m", 3, 22, 5, 39); // preset for inscrption
         // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
         // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
-
+        // r.displayCard(1,1,"", 0, 0, 0, new ArrayList<String>());
         r.flush();
-        System.out.println("\u001b[4mTest\u001b[0mTest");
+        // System.out.println("\u001b[4mTest\u001b[0mTest");
     }
 
     private static String replaceAt(int startIndex, 
