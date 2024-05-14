@@ -25,7 +25,7 @@ public class Board {
         return returnDeck;
     }
 
-    public void update() {
+    public int update() {
         for (int j = 0; j < board[0].length; j++) {
             if (board[0][j] != null && board[1][j] != null) {
                 board[0][j].attackCard(board[1][j], board[0][j].getPower());
@@ -33,7 +33,7 @@ public class Board {
             if (board[0][j] != null && board[1][j] == null) {
                 health += board[0][j].getPower();
                 if (health >= 5) {
-                    // return to the map
+                    return -1; // return to map
                 }
             }
         }
@@ -44,17 +44,21 @@ public class Board {
             if (board[1][j] != null && board[0][j] == null) {
                 health -= board[1][j].getPower();
                 if (health <= 5) {
-                    // return to game screen
+                    return 1; // return to game screen
                 }
             }
         }
-
-        
+        return 0;
     }
 
-    public void changeBoard() {
-        
+    // location is index in the array, 0 for very last and 4 for last
+    // side true for player false forAI
+    public void changeBoard(boolean side, int location) {
+        if (side == true) {
+            board[0][location]
+        }
     }
+
     public static void main(String[] args) {
     }
 }

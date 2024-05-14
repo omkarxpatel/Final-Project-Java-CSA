@@ -8,6 +8,7 @@ public class CursorPosition {
         this.screen = screen;
         this.row = row;
         this.col = col;
+        this.action = action;
     }
 
     public int screen() {

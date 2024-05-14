@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Render",
+            "request": "launch",
+            "mainClass": "Render",
+            "projectName": "Final-Project-Java-CSA_2dbd6655"
+        },
+        {
+            "type": "java",
+            "name": "Game",
+            "request": "launch",
+            "mainClass": "Game",
+            "projectName": "Final-Project-Java-CSA_2dbd6655"
+        },
+        {
+            "type": "java",
             "name": "Board",
             "request": "launch",
             "mainClass": "Board",
