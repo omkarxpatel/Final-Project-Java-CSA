@@ -11,9 +11,13 @@ public class MapNode {
         connections = new ArrayList<MapNode>();
     }
 
-    public MapNode(int chapter, String event, ArrayList<MapNode> connections) {
-        this.chapter = chapter;
+    public MapNode(int chapter, String event) {
+        this(chapter);
         this.event = event;
+    }
+
+    public MapNode(int chapter, String event, ArrayList<MapNode> connections) {
+        this(chapter, event);
         this.connections = connections;
     }
 

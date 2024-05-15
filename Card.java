@@ -5,13 +5,17 @@ public class Card {
     private int health;
     private int power;
     private int cost;
+    private int costType;
     private ArrayList<String> abilities;
     private String desc;
+
+    
 
     public Card(String name,
             int health,
             int power,
             int cost,
+            int costType,
             ArrayList<String> abilities,
             String desc) {
         this.health = health;
@@ -35,6 +39,10 @@ public class Card {
 
     public int getCost() {
         return cost;
+    }
+
+    public int getCostType() {
+        return costType;
     }
 
     public String getDesc() {
