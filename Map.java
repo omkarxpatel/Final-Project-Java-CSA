@@ -1,12 +1,15 @@
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Map {
     private int chapter;
     private ArrayList<MapNode> nodeBuffer = new ArrayList<MapNode>();
+    private static TreeMap<String, Card> cards = Card.cards;
     public static final Card[] CARD_POOL_COMMON = new Card[] {
-        new Card("adder", 1, 1, 2, 1, null, null),
-        new Card(null, 0, 0, 0, 0, null, null),
+        cards.get("adder"),
+        cards.get("stoat"),
+
     };
     
     public Map(int chapter) {
@@ -26,12 +29,16 @@ public class Map {
             addNode("campfire");
             addNode("addTribe");
         }
+        if (chapter >= 2) {
+            addNode("trial");
+        }
         if (Math.random() < 0.5) {
             addNode("mycologist");
         }
         if (Math.random() < 0.0) {
             addNode("copy");
         }
+        addNode("consumable");
     }
 
     private void addNode(String event) {

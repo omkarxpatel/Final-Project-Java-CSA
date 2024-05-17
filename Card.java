@@ -7,14 +7,21 @@ public class Card {
     private int cost;
     private int costType;
     private ArrayList<String> abilities;
-    private String desc;
     public static TreeMap<String,Card> cards = new TreeMap<String,Card>(); 
+    public static TreeMap<String,String> descriptions = new TreeMap<String,String>();
 
     static {
-        cards.put("adder", new Card("adder", 1, 1, 2, 1, null));
+        ArrayList<String> leap = new ArrayList<String>();
+        leap.add("leap");
+        ArrayList<String> deathTouch = new ArrayList<String>();
+        deathTouch.add("deathtouch");
+
+        cards.put("squirrel", new Card("squirrel", 1, 0, 0, 0, null));
+        cards.put("adder", new Card("adder", 1, 1, 2, 1, (ArrayList<String>)deathTouch.clone()));
         cards.put("stoat", new Card("stoat", 2, 1, 1, 1, null));
         cards.put("wolf", new Card("wolf", 2, 3, 2, 1, null));
-        cards.put("bullfrog", new Card("bullfrog", 2, 1, 1, 1, new ArrayList<String>()));
+        cards.put("bullfrog", new Card("bullfrog", 2, 1, 1, 1, (ArrayList<String>)leap.clone()));
+
     }
 
     public Card(String name,
@@ -49,10 +56,6 @@ public class Card {
 
     public int getCostType() {
         return costType;
-    }
-
-    public String getDesc() {
-        return desc;
     }
 
     public ArrayList<String> getAbilities() {
