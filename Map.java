@@ -17,7 +17,7 @@ public class Map {
 
     public void initNodes() {
         for (int i = 0; i < 5 + (int)(3 * Math.random()); i++) {
-
+            addNode("battle");
         }
         for (int i = 0; i < 2; i++) {
             addNode("sacrifice");
@@ -26,16 +26,12 @@ public class Map {
             addNode("campfire");
             addNode("addTribe");
         }
-        if (chapter >= 2) {
-            addNode("trial");
-        }
         if (Math.random() < 0.5) {
             addNode("mycologist");
         }
-        if (Math.random() < 0.3) {
+        if (Math.random() < 0.0) {
             addNode("copy");
         }
-        nodeBuffer.add(new MapNode(chapter, "sacrifice"));
     }
 
     private void addNode(String event) {

@@ -72,15 +72,15 @@ public class Render {
     };
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
-                    new CursorPosition(0, 7, 13, "play"),
-                    new CursorPosition(0, 1, 30, "credits"),
-                    new CursorPosition(0, 7, 47, "continue")
+                    new CursorPosition(0, 7, 13, "play", null),
+                    new CursorPosition(0, 1, 30, "credits", null),
+                    new CursorPosition(0, 7, 47, "continue", null)
             },
             {
-                    new CursorPosition(1, 0, 5, "card")
+                    new CursorPosition(1, 0, 5, "card", null)
             },
             {
-                    new CursorPosition(2, 6, 26, "title")
+                    new CursorPosition(2, 6, 26, "title", null)
             }
     };
 
@@ -109,6 +109,46 @@ public class Render {
         for (int i = startPosRow; i < endPosRow; i++) {
             String displayLine = displayBuffer.get(i).toString();
             displayLine = displayLine.substring(0, startPosCol) + color + displayLine.substring(startPosCol, endPosCol)
+                    + COLOR_WHITE + displayLine.substring(endPosCol);
+            displayBuffer.set(i, new StringBuffer(displayLine));
+        }
+    }
+
+    public void formatText(String format,
+            int startPosRow,
+            int startPosCol,
+            int endPosRow,
+            int endPosCol) {
+        if (startPosRow < 0)
+            startPosRow = 1;
+
+    
+        String formatting;
+        switch (format) {
+            case "bold": {
+                formatting = "\u001B[1m";
+                break;
+            }
+            case "faint": {
+                formatting = "\u001B[2m";
+                break;
+            }
+            case "italic": {
+                formatting = "\u001B[3m";
+                break;
+            }
+            case "underline": {
+                formatting = "\u001B[4m";
+                break;
+            }
+            default: {
+                formatting = COLOR_WHITE;
+                break;
+            }
+        }
+        for (int i = startPosRow; i < endPosRow; i++) {
+            String displayLine = displayBuffer.get(i).toString();
+            displayLine = displayLine.substring(0, startPosCol) + formatting + displayLine.substring(startPosCol, endPosCol)
                     + COLOR_WHITE + displayLine.substring(endPosCol);
             displayBuffer.set(i, new StringBuffer(displayLine));
         }
@@ -224,8 +264,8 @@ public class Render {
 
     public static void main(String[] args) {
         Render r = new Render();
-        r.loadScreen(1);
-        // r.colorText("\u001B[31m", 3, 22, 5, 39); // preset for inscrption
+        r.loadScreen(0);
+        r.formatText("underline", 3, 22, 5, 39); // preset for inscrption
         // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
         // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
         // r.displayCard(1,1,"", 0, 0, 0, new ArrayList<String>());

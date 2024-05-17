@@ -32,6 +32,7 @@ public class Game {
                 if (selected < 0)
                     selected = cursorPositions.length - 1;
                 render.displayCursor(screen, selected);
+                hoverAction();
                 break;
             }
             case "d": {
@@ -59,6 +60,10 @@ public class Game {
             default:
                 break;
         }
+    }
+
+    public void hoverAction() {
+
     }
 
     public void gotoScreen(int screenIndex) {
