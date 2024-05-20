@@ -3,12 +3,14 @@ public class CursorPosition {
     private int row;
     private int col;
     private String action;
+    private String hover;
 
-    public CursorPosition(int screen, int row, int col, String action) {
+    public CursorPosition(int screen, int row, int col, String action, String hover) {
         this.screen = screen;
         this.row = row;
         this.col = col;
         this.action = action;
+        this.hover = hover;
     }
 
     public int screen() {
@@ -25,5 +27,9 @@ public class CursorPosition {
 
     public String action() {
         return action;
+    }
+
+    public String hover() {
+        return hover;
     }
 }

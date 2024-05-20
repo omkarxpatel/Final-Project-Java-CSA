@@ -13,8 +13,9 @@ public class Render {
     private char lastCursorChar = (char) 0;
     private static char emptyChar = '.';
     private static String emptyLine = null;
-    private static char cursorChar = '✦';
-    private static int lineLength = 100;
+    private static char[] cursorChars = new char[] {'✦', };
+    private static int cursor = 0;
+    private static int lineLength = 61;
 
     private static final String COLOR_WHITE = "\u001B[0m";
     private static String[] screenTitle = new String[] {
@@ -36,23 +37,23 @@ public class Render {
     };
     private static String[] screenDeck = new String[] {
             "-------------------------------------------------------------",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
-            ".............................................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
+            "│......................│.....................................",
             "-------------------------------------------------------------"
     };
     private static String[] screenCredits = new String[] {
@@ -72,15 +73,15 @@ public class Render {
     };
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
-                    new CursorPosition(0, 7, 13, "play"),
-                    new CursorPosition(0, 1, 30, "credits"),
-                    new CursorPosition(0, 7, 47, "continue")
+                    new CursorPosition(0, 7, 13, "play", null),
+                    new CursorPosition(0, 1, 30, "credits", null),
+                    new CursorPosition(0, 7, 47, "continue", null)
             },
             {
-                    new CursorPosition(1, 0, 5, "card")
+                    new CursorPosition(1, 0, 5, "card", null)
             },
             {
-                    new CursorPosition(2, 6, 26, "title")
+                    new CursorPosition(2, 6, 26, "title", null)
             }
     };
 
@@ -109,6 +110,46 @@ public class Render {
         for (int i = startPosRow; i < endPosRow; i++) {
             String displayLine = displayBuffer.get(i).toString();
             displayLine = displayLine.substring(0, startPosCol) + color + displayLine.substring(startPosCol, endPosCol)
+                    + COLOR_WHITE + displayLine.substring(endPosCol);
+            displayBuffer.set(i, new StringBuffer(displayLine));
+        }
+    }
+
+    public void formatText(String format,
+            int startPosRow,
+            int startPosCol,
+            int endPosRow,
+            int endPosCol) {
+        if (startPosRow < 0)
+            startPosRow = 1;
+
+    
+        String formatting;
+        switch (format) {
+            case "bold": {
+                formatting = "\u001B[1m";
+                break;
+            }
+            case "faint": {
+                formatting = "\u001B[2m";
+                break;
+            }
+            case "italic": {
+                formatting = "\u001B[3m";
+                break;
+            }
+            case "underline": {
+                formatting = "\u001B[4m";
+                break;
+            }
+            default: {
+                formatting = COLOR_WHITE;
+                break;
+            }
+        }
+        for (int i = startPosRow; i < endPosRow; i++) {
+            String displayLine = displayBuffer.get(i).toString();
+            displayLine = displayLine.substring(0, startPosCol) + formatting + displayLine.substring(startPosCol, endPosCol)
                     + COLOR_WHITE + displayLine.substring(endPosCol);
             displayBuffer.set(i, new StringBuffer(displayLine));
         }
@@ -144,7 +185,7 @@ public class Render {
         lastCursorRow = row;
         lastCursorCol = col;
         lastCursorChar = displayBuffer.get(row).charAt(col);
-        displayBuffer.get(row).setCharAt(col, cursorChar);
+        displayBuffer.get(row).setCharAt(col, cursorChars[cursor]);
     }
 
     public void loadScreen(int screenIndex) {
@@ -171,7 +212,7 @@ public class Render {
 
         line = displayBuffer.get(posRow + 1).toString();
         line = replaceAt(posCol, posCol + 5, line, "│ " +
-                (name == null || name.equals("") ? " " : name.substring(0, 1)) +
+                (name == null || name.equals("") ? " " : Character.toUpperCase(name.charAt(0))) +
                 (cost == 0 ? " " : cost) +
                 "│");
         displayBuffer.set(posRow + 1, new StringBuffer(line));
@@ -183,7 +224,7 @@ public class Render {
         line = displayBuffer.get(posRow + 3).toString();
         line = replaceAt(posCol, posCol + 5, line, "│" +
                 (health == 0 ? " " : health) +
-                (abilities.isEmpty() ? " " : abilities.get(0).substring(0, 1)) +
+                (abilities == null || abilities.isEmpty() ? " " : abilities.get(0).substring(0, 1)) +
                 (power == 0 ? " " : power) +
                 "│");
         displayBuffer.set(posRow + 3, new StringBuffer(line));
@@ -201,6 +242,10 @@ public class Render {
                 card.getPower(),
                 card.getCost(),
                 card.getAbilities());
+    }
+
+    public void displayCardBig(Card card) {
+
     }
 
     public void flush() {
@@ -224,8 +269,8 @@ public class Render {
 
     public static void main(String[] args) {
         Render r = new Render();
-        r.loadScreen(1);
-        // r.colorText("\u001B[31m", 3, 22, 5, 39); // preset for inscrption
+        r.loadScreen(0);
+        r.formatText("underline", 3, 22, 5, 39); // preset for inscrption
         // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
         // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
         // r.displayCard(1,1,"", 0, 0, 0, new ArrayList<String>());

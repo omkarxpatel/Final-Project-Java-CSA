@@ -32,6 +32,7 @@ public class Game {
                 if (selected < 0)
                     selected = cursorPositions.length - 1;
                 render.displayCursor(screen, selected);
+                hoverAction();
                 break;
             }
             case "d": {
@@ -54,10 +55,36 @@ public class Game {
                         gotoScreen(2);
                         break;
                     }
+                    case "play": {
+                        gotoScreen(1);
+                        ArrayList<Card> initCards = new ArrayList<Card>();
+                        initCards.add(Card.cards.get("stoat"));
+                        initCards.add(Card.cards.get("wolf"));
+                        initCards.add(Card.cards.get("bullfrog"));
+                        player = new Player(initCards);
+                        deckDrawCards();
+
+                    }
                 }
             }
             default:
                 break;
+        }
+    }
+
+    public void hoverAction() {
+
+    }
+
+    public void deckDrawCards() {
+        ArrayList<Card> cards = player.getCards();
+        int row = 1;
+        int col = 25;
+        if (cards.size() < 7) {
+            for (Card c : cards) {
+                render.displayCard(1, col, c);
+                col += 5;
+            }
         }
     }
 
@@ -79,6 +106,7 @@ public class Game {
         Player p = new Player();
         Board b = new Board(p);
         Map m = new Map(1);
+        Map m = new Map(0);
         Game game = new Game(b, p, m, r); // TODO
         String input = null;
         game.flush();
