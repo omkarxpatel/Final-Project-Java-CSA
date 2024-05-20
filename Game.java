@@ -78,7 +78,7 @@ public class Game {
         Render r = new Render();
         Player p = new Player();
         Board b = new Board(p);
-        Map m = new Map();
+        Map m = new Map(1);
         Game game = new Game(b, p, m, r); // TODO
         String input = null;
         game.flush();

@@ -29,6 +29,9 @@ public class Board {
         for (int j = 0; j < board[0].length; j++) {
             if (board[0][j] != null && board[1][j] != null) {
                 board[0][j].attackCard(board[1][j], board[0][j].getPower());
+                if (board[1][j].getHealth() <= 0) {
+                    board[1][j] = null;
+                }
             }
             if (board[0][j] != null && board[1][j] == null) {
                 health += board[0][j].getPower();
@@ -40,6 +43,9 @@ public class Board {
         for (int j = 0; j < board[0].length; j++) {
             if (board[1][j] != null && board[0][j] != null) {
                 board[1][j].attackCard(board[0][j], board[1][j].getPower());
+                if (board[0][j].getHealth() <= 0) {
+                    board[0][j] = null;
+                }
             }
             if (board[1][j] != null && board[0][j] == null) {
                 health -= board[1][j].getPower();
@@ -53,10 +59,21 @@ public class Board {
 
     // location is index in the array, 0 for very last and 4 for last
     // side true for player false forAI
-    public void changeBoard(boolean side, int location) {
+    public void changeBoard(boolean side, int location, Card new1) {
         if (side == true) {
-            board[0][location]
+            board[0][location] = new1;
         }
+        else {
+            board[1][location] = new1;
+        }
+    }
+
+    public void draw() {
+        currentPlayer.draw(deck.pop());
+    }
+
+    public void sacrifice(int location) {
+        board[0][location] = null;
     }
 
     public static void main(String[] args) {
