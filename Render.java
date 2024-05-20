@@ -71,17 +71,21 @@ public class Render {
             screenDeck,
             screenCredits
     };
+    public static CursorPosition[] cursorPositionsDeck = new CursorPosition[21];
+    static {
+        for (int i = 0; i < 21; i++) {
+            cursorPositionsDeck[i] = new CursorPosition(1, 6 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
+        }
+    }
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
-                    new CursorPosition(0, 7, 13, "play", null),
-                    new CursorPosition(0, 1, 30, "credits", null),
-                    new CursorPosition(0, 7, 47, "continue", null)
+                new CursorPosition(0, 7, 13, "play", null),
+                new CursorPosition(0, 1, 30, "credits", null),
+                new CursorPosition(0, 7, 47, "continue", null)
             },
+            cursorPositionsDeck,
             {
-                    new CursorPosition(1, 0, 5, "card", null)
-            },
-            {
-                    new CursorPosition(2, 6, 26, "title", null)
+                new CursorPosition(2, 6, 26, "title", null)
             }
     };
 
@@ -199,6 +203,14 @@ public class Render {
         lastCursorRow = -1;
     }
 
+    public void fillChar(int startPosRow, int startPosCol, int endPosRow, int endPosCol, char c) {
+        for (int i = startPosRow; i <= endPosRow; i++ ) {
+            for (int j = startPosCol; j <= endPosCol; j++) {
+                displayBuffer.get(i).setCharAt(j, c);
+            }
+        }
+    }
+
     public void displayCard(int posRow,
             int posCol,
             String name,
@@ -245,7 +257,12 @@ public class Render {
     }
 
     public void displayCardBig(Card card) {
-
+        fillChar(1, 1, 17, 22, emptyChar);
+        if (card == null) {
+            return;
+        }
+        String name = card.getName();
+        displayText(name, 1, (22-name.length()) / 2, 22);
     }
 
     public void flush() {

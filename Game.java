@@ -26,8 +26,10 @@ public class Game {
         // TODO
         switch (input) {
             case "a": {
-                if (cursorPositions.length == 1)
+                if (cursorPositions.length == 1) {
+                    hoverAction();
                     break;
+                }
                 selected--;
                 if (selected < 0)
                     selected = cursorPositions.length - 1;
@@ -36,12 +38,15 @@ public class Game {
                 break;
             }
             case "d": {
-                if (cursorPositions.length == 1)
+                if (cursorPositions.length == 1) {
+                    hoverAction();
                     break;
+                }
                 selected++;
                 if (selected > cursorPositions.length - 1)
                     selected = 0;
                 render.displayCursor(screen, selected);
+                hoverAction();
                 break;
             }
             case "s": {
@@ -63,7 +68,7 @@ public class Game {
                         initCards.add(Card.cards.get("bullfrog"));
                         player = new Player(initCards);
                         deckDrawCards();
-
+                        hoverAction();
                     }
                 }
             }
@@ -73,7 +78,20 @@ public class Game {
     }
 
     public void hoverAction() {
-
+        String action = Render.CURSOR_PAIRS[screen][selected].hover();
+        if (action == null || action.equals("") ) return;
+        switch (action) {
+            case "showCardInDeck": {
+                ArrayList<Card> deck = player.getCards();
+                if (selected >= deck.size()) {
+                    render.displayCardBig(null);
+                }
+                else {
+                    render.displayCardBig(player.getCards().get(selected));
+                }
+                
+            }
+        }
     }
 
     public void deckDrawCards() {
@@ -106,9 +124,12 @@ public class Game {
         Player p = new Player();
         Board b = new Board(p);
         Map m = new Map(1);
-        Map m = new Map(0);
         Game game = new Game(b, p, m, r); // TODO
         String input = null;
+        m.initNodes(); 
+        m.randNodes();
+        // display the map here or something
+        
         game.flush();
         while (true) {
             input = sc.nextLine();
