@@ -14,6 +14,7 @@ public class Map {
     };
     private MapNode[][] map = new MapNode[5][5];
     private int[][] mapLayout = {
+        
         {0,1,0,1,0},
         {1,0,0,0,1},
         {0,1,0,1,0},

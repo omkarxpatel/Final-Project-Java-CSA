@@ -70,6 +70,12 @@ public class Game {
                         deckDrawCards();
                         hoverAction();
                         render.displayText("THIS IS YOUR STARTING DECK. ", 7, 25, 30);
+                        break;
+                    }
+                    case "exitDeck": {
+                        gotoScreen(3);
+
+                        break;
                     }
                 }
             }

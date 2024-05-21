@@ -36,7 +36,7 @@ public class Board {
             if (board[0][j] != null && board[1][j] == null) {
                 health += board[0][j].getPower();
                 if (health >= 5) {
-                    return -1; // return to map
+                    return 1; // return to map
                 }
             }
         }
@@ -49,8 +49,8 @@ public class Board {
             }
             if (board[1][j] != null && board[0][j] == null) {
                 health -= board[1][j].getPower();
-                if (health <= 5) {
-                    return 1; // return to game screen
+                if (health <= -5) {
+                    return -1; // return to game screen
                 }
             }
         }
@@ -77,5 +77,12 @@ public class Board {
     }
 
     public static void main(String[] args) {
+    }
+
+    public void playCard(ArrayList<Integer> sacrifices, Card new1, int location) {
+        for (int i : sacrifices) {
+            sacrifice(i);
+        }
+        changeBoard(true, location, new1);
     }
 }
