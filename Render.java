@@ -45,7 +45,7 @@ public class Render {
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
-            "│......................│.....................................",
+            "│......................│....................................>",
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
@@ -71,11 +71,12 @@ public class Render {
             screenDeck,
             screenCredits
     };
-    public static CursorPosition[] cursorPositionsDeck = new CursorPosition[21];
+    public static CursorPosition[] cursorPositionsDeck = new CursorPosition[22];
     static {
         for (int i = 0; i < 21; i++) {
             cursorPositionsDeck[i] = new CursorPosition(1, 6 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
         }
+        cursorPositionsDeck[21] = new CursorPosition(1, 7, 60, "exitDeck", null);
     }
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
@@ -261,8 +262,16 @@ public class Render {
         if (card == null) {
             return;
         }
-        String name = card.getName();
-        displayText(name, 1, (22-name.length()) / 2, 22);
+        String name = Character.toUpperCase(card.getName().charAt(0)) + card.getName().substring(1);
+        displayText(name, 1, 1 + (21-name.length()) / 2, 22);
+        switch (card.getCostType()) {
+            case 0: {
+                displayText(Character.toString(emptyChar), 2, 22, 1);
+            }
+            case 1: {
+                displayText("‡", 2, 22, 1);
+            }
+        }
     }
 
     public void flush() {

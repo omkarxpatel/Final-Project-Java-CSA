@@ -69,6 +69,7 @@ public class Game {
                         player = new Player(initCards);
                         deckDrawCards();
                         hoverAction();
+                        render.displayText("THIS IS YOUR STARTING DECK. ", 7, 25, 30);
                     }
                 }
             }
