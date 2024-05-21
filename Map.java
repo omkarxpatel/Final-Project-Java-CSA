@@ -79,7 +79,7 @@ public class Map {
                     // have logic for printing mapnode object
                 }
                 else {
-                    
+                    //pass
                 }
             }
         }
