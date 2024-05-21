@@ -12,19 +12,34 @@ public class Map {
         cards.get("stoat"),
 
     };
+
     private MapNode[][] map = new MapNode[5][5];
     private int[][] mapLayout = {
         
+        // {0,0,2,0,0}, // boss fight
+        // {0,1,0,1,0},
+        // {1,0,0,0,1},
+        // {0,1,0,1,0},
+        // {0,0,1,0,0},
+        // {0,1,0,1,0},
+        // {1,0,0,0,1},
+        // {0,1,0,1,0},
+        {0,0,1,0,0},
         {0,1,0,1,0},
         {1,0,0,0,1},
         {0,1,0,1,0},
         {0,0,1,0,0}
         };
+    private int mapX = 2;
+    private int mapY = map.length - 1;
+
+    
     
     public Map(int chapter) {
         this.chapter = chapter;
         initNodes();
         randNodes();
+        printMapTest();
     }
 
     public void initNodes() {
@@ -47,7 +62,7 @@ public class Map {
         if (Math.random() < 0.0) {
             addNode("copy");
         }
-        addNode("consumable");
+        addNode("items");
     }
 
     private void addNode(String event) {
@@ -61,7 +76,6 @@ public class Map {
     //     [0,      0,      object, 0,      0]
     //     ]
     public void randNodes() {
-        int count = 0;
         Stack<MapNode> shuffled = shuffle(nodeBuffer);
         for (int i = 0; i < mapLayout.length; i++) {
             for (int j = 0; j < mapLayout[0].length; j++) {
@@ -72,18 +86,79 @@ public class Map {
         }
     }
 
-    public void printMap() {
+// ........................│0│.......│0│........................
+// ........................└─┘.......└─┘........................
+// .......................╱.............╲.......................
+// ......................╱...............╲......................
+// ...................┌─┐.................┌─┐...................
+// ...................│0│.................│0│...................
+// ...................└─┘.................└─┘...................
+// ......................╲...............╱......................
+// .......................╲.............╱.......................
+// ........................┌─┐.......┌─┐........................
+// ........................│0│.......│0│........................
+// ........................└─┘.......└─┘........................
+// ...........................╲.....╱...........................
+// ............................╲...╱............................
+// .............................┌─┐.............................
+// .............................│0│.............................
+// .............................└─┘.............................
+// .............................................................
+
+    public void printMapTest() {
+
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j] != null) {
-                    // have logic for printing mapnode object
-                }
-                else {
-                    //pass
+            int countNull = 0;
+            for (int k = 0; k < map[i].length; k++) {
+                if (map[i][k] == null) {
+                    countNull++;
                 }
             }
+            countNull = map[0].length-countNull;
+            if (countNull == 0) {
+                for (int z = 0; z < 2; z++) {
+                    System.out.println(".............................................................");
+                }
+            }
+            else if (countNull == 1) {
+                for (int j = 0; j < map[i].length; j++) {
+                    if (map[i][j] != null) {
+                        System.out.println(".............................┌─┐.............................");
+                        System.out.println(".............................│"+map[i][j].event().substring(0,1)+"│.............................");
+                        System.out.println(".............................└─┘.............................");
+                    }
+                }
+            }
+            else if (countNull == 2) {
+                String first = "";
+                for (int j = 0; j < map[i].length; j++) {
+                    if (map[i][j] != null) {
+                        if (first == "") {
+                            first = map[i][j].event().substring(0,1);
+                        }
+                        else {
+                            System.out.println("...................│"+first+"│.................│"+map[i][j].event().substring(0,1)+"│...................");
+                        }
+                    }
+                }
+            }
+            else {
+                System.out.println(countNull);
+            }
+
+            // for (int j = 0; j < map[i].length; j++) {
+            //     if (map[i][j] != null) {
+            //         System.out.print(map[i][j].event() + "          ");
+            //     }
+            //     else {
+            //         System.out.print(map[i][j] + "          ");
+            //     }
+            // }
+            // System.out.println();
         }
+        System.out.println();
     }
+
 
     public Stack<MapNode> shuffle(ArrayList<MapNode> deck1) {
         int index = 0;
