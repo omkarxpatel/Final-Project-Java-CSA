@@ -107,45 +107,52 @@ public class Map {
 
     public void printMapTest() {
 
-        for (int i = 0; i < map.length; i++) {
+        for (MapNode[] map1 : map) {
             int countNull = 0;
-            for (int k = 0; k < map[i].length; k++) {
-                if (map[i][k] == null) {
+            for (MapNode item : map1) {
+                if (item == null) {
                     countNull++;
                 }
             }
             countNull = map[0].length-countNull;
-            if (countNull == 0) {
-                for (int z = 0; z < 2; z++) {
-                    System.out.println(".............................................................");
-                }
-            }
-            else if (countNull == 1) {
-                for (int j = 0; j < map[i].length; j++) {
-                    if (map[i][j] != null) {
-                        System.out.println(".............................┌─┐.............................");
-                        System.out.println(".............................│"+map[i][j].event().substring(0,1)+"│.............................");
-                        System.out.println(".............................└─┘.............................");
+            System.out.println(countNull);
+            switch (countNull) {
+                case 5 -> {
+                    for (int z = 0; z < 2; z++) {
+                        System.out.println(".............................................................");
                     }
-                }
-            }
-            else if (countNull == 2) {
-                String first = "";
-                for (int j = 0; j < map[i].length; j++) {
-                    if (map[i][j] != null) {
-                        if (first == "") {
-                            first = map[i][j].event().substring(0,1);
-                        }
-                        else {
-                            System.out.println("...................│"+first+"│.................│"+map[i][j].event().substring(0,1)+"│...................");
+                } // default
+                case 1 -> {
+                    for (MapNode item : map1) {
+                        if (item != null) {
+                            System.out.println(".............................┌─┐.............................");
+                            System.out.println(".............................│" + item.event().substring(0, 1) + "│.............................");
+                            System.out.println(".............................└─┘.............................");
                         }
                     }
                 }
+                case 2 -> {
+                    String first = "";
+                    for (MapNode item : map1) {
+                        if (item != null) {
+                            if ("".equals(first)) {
+                                first = item.event().substring(0, 1);
+                            } else {
+                                if (map1[1] != null) {
+                                    System.out.println("........................┌─┐.......┌─┐........................");
+                                    System.out.println("........................│"+first+"│.......│" + item.event().substring(0, 1) + "│........................");
+                                    System.out.println("........................└─┘.......└─┘........................");
+                                } else {
+                                    System.out.println("...................┌─┐.................┌─┐...................");
+                                    System.out.println("...................│"+first+"│.................│" + item.event().substring(0, 1) + "│...................");
+                                    System.out.println("...................└─┘.................└─┘...................");
+                                }
+                            }
+                        }
+                    }
+                }
+                default -> System.out.println(countNull);
             }
-            else {
-                System.out.println(countNull);
-            }
-
             // for (int j = 0; j < map[i].length; j++) {
             //     if (map[i][j] != null) {
             //         System.out.print(map[i][j].event() + "          ");

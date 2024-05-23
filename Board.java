@@ -33,7 +33,7 @@ public class Board {
                     board[1][j] = null;
                 }
             }
-            if (board[0][j] != null && board[1][j] == null) {
+            else if (board[0][j] != null && board[1][j] == null) {
                 health += board[0][j].getPower();
                 if (health >= 5) {
                     return 1; // return to map
@@ -47,7 +47,7 @@ public class Board {
                     board[0][j] = null;
                 }
             }
-            if (board[1][j] != null && board[0][j] == null) {
+            else if (board[1][j] != null && board[0][j] == null) {
                 health -= board[1][j].getPower();
                 if (health <= -5) {
                     return -1; // return to game screen

@@ -67,7 +67,13 @@ public class Card {
     }
 
     public void attackCard(Card opponent, int cardPower) {
-        opponent.modifyHealth(-cardPower);
+        if (abilities.contains("deathtouch")) {
+            opponent.modifyHealth(opponent.getHealth());
+        }
+        else {
+            opponent.modifyHealth(-cardPower);
+        }
+        
         System.out.println(name + " has dealt " + String.valueOf(power) + " damage to " + opponent.getName());
     }
 
@@ -75,6 +81,8 @@ public class Card {
         if (ability.equals("Insta Kill")) {
             attackCard(opponent, opponent.getHealth());
         }
+
+
     }
 
 }

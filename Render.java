@@ -309,6 +309,7 @@ public class Render {
                 break;
             }
         }
+        displayText(card.getHealth() + "", 16, 1, 2);
     }
 
     public void flush() {
