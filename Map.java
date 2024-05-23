@@ -8,42 +8,41 @@ public class Map {
     private ArrayList<MapNode> nodeBuffer = new ArrayList<MapNode>();
     private static TreeMap<String, Card> cards = Card.cards;
     public static final Card[] CARD_POOL_COMMON = new Card[] {
-        cards.get("adder"),
-        cards.get("stoat"),
+            cards.get("adder"),
+            cards.get("stoat"),
 
     };
 
-    private MapNode[][] map = new MapNode[5][5];
+    private ArrayList<String> mapResult = new ArrayList<String>();
+    private MapNode[][] map = new MapNode[9][5];
     private int[][] mapLayout = {
-        
-        // {0,0,2,0,0}, // boss fight
-        // {0,1,0,1,0},
-        // {1,0,0,0,1},
-        // {0,1,0,1,0},
-        // {0,0,1,0,0},
-        // {0,1,0,1,0},
-        // {1,0,0,0,1},
-        // {0,1,0,1,0},
-        {0,0,1,0,0},
-        {0,1,0,1,0},
-        {1,0,0,0,1},
-        {0,1,0,1,0},
-        {0,0,1,0,0}
-        };
-    private int mapX = 2;
-    private int mapY = map.length - 1;
 
-    
-    
+            // {0,0,1,0,0}, // boss fight
+            // {0,1,0,1,0},
+            // {1,0,0,0,1},
+            // { 0, 1, 0, 1, 0 },
+            { 0, 0, 1, 0, 0 },
+            { 0, 1, 0, 1, 0 },
+            { 1, 0, 0, 0, 1 },
+            { 0, 1, 0, 1, 0 },
+            { 0, 0, 1, 0, 0 },
+            { 0, 1, 0, 1, 0 },
+            { 1, 0, 0, 0, 1 },
+            { 0, 1, 0, 1, 0 },
+            { 0, 0, 1, 0, 0 }
+    };
+    private int mapX = 2;
+    private int mapY = 29;
+
     public Map(int chapter) {
         this.chapter = chapter;
         initNodes();
         randNodes();
-        printMapTest();
+        printMap();
     }
 
     public void initNodes() {
-        for (int i = 0; i < 5 + (int)(3 * Math.random()); i++) {
+        for (int i = 0; i < 5 + (int) (3 * Math.random()); i++) {
             addNode("battle");
         }
         for (int i = 0; i < 2; i++) {
@@ -70,11 +69,11 @@ public class Map {
     }
 
     // map = [
-    //     [0,      object, 0,      object, 0]
-    //     [object, 0,      0,      0,      object]
-    //     [0,      object, 0,      object, 0]
-    //     [0,      0,      object, 0,      0]
-    //     ]
+    // [0, object, 0, object, 0]
+    // [object, 0, 0, 0, object]
+    // [0, object, 0, object, 0]
+    // [0, 0, object, 0, 0]
+    // ]
     public void randNodes() {
         Stack<MapNode> shuffled = shuffle(nodeBuffer);
         for (int i = 0; i < mapLayout.length; i++) {
@@ -86,48 +85,37 @@ public class Map {
         }
     }
 
-// ........................│0│.......│0│........................
-// ........................└─┘.......└─┘........................
-// .......................╱.............╲.......................
-// ......................╱...............╲......................
-// ...................┌─┐.................┌─┐...................
-// ...................│0│.................│0│...................
-// ...................└─┘.................└─┘...................
-// ......................╲...............╱......................
-// .......................╲.............╱.......................
-// ........................┌─┐.......┌─┐........................
-// ........................│0│.......│0│........................
-// ........................└─┘.......└─┘........................
-// ...........................╲.....╱...........................
-// ............................╲...╱............................
-// .............................┌─┐.............................
-// .............................│0│.............................
-// .............................└─┘.............................
-// .............................................................
+    public void printMap() {
+        // for (MapNode[] map1 : map) {
 
-    public void printMapTest() {
-
-        for (MapNode[] map1 : map) {
+        for (int i = 0; i < map.length; i++) {
+            MapNode[] map1 = map[i];
             int countNull = 0;
             for (MapNode item : map1) {
                 if (item == null) {
                     countNull++;
                 }
             }
-            countNull = map[0].length-countNull;
-            System.out.println(countNull);
+            countNull = map[0].length - countNull;
+            for (int z = 0; z < 2; z++) {
+                if (map1 != map[0] || z == 1)
+                    mapResult.add(".............................................................");
+            }
             switch (countNull) {
-                case 5 -> {
-                    for (int z = 0; z < 2; z++) {
-                        System.out.println(".............................................................");
-                    }
-                } // default
+
                 case 1 -> {
                     for (MapNode item : map1) {
                         if (item != null) {
-                            System.out.println(".............................┌─┐.............................");
-                            System.out.println(".............................│" + item.event().substring(0, 1) + "│.............................");
-                            System.out.println(".............................└─┘.............................");
+                            String color = "";
+                            String white = "\u001B[0m";
+                            if (map1.equals(map[0]))
+                                color = "\u001B[31m"; // for final boss
+                            mapResult.add("............................." + color + "┌─┐" + white
+                                    + ".............................");
+                            mapResult.add("............................." + color + "│"
+                                    + item.event().substring(0, 1) + "│" + white + ".............................");
+                            mapResult.add("............................." + color + "└─┘" + white
+                                    + ".............................");
                         }
                     }
                 }
@@ -139,13 +127,15 @@ public class Map {
                                 first = item.event().substring(0, 1);
                             } else {
                                 if (map1[1] != null) {
-                                    System.out.println("........................┌─┐.......┌─┐........................");
-                                    System.out.println("........................│"+first+"│.......│" + item.event().substring(0, 1) + "│........................");
-                                    System.out.println("........................└─┘.......└─┘........................");
+                                    mapResult.add("........................┌─┐.......┌─┐........................");
+                                    mapResult.add("........................│" + first + "│.......│"
+                                            + item.event().substring(0, 1) + "│........................");
+                                    mapResult.add("........................└─┘.......└─┘........................");
                                 } else {
-                                    System.out.println("...................┌─┐.................┌─┐...................");
-                                    System.out.println("...................│"+first+"│.................│" + item.event().substring(0, 1) + "│...................");
-                                    System.out.println("...................└─┘.................└─┘...................");
+                                    mapResult.add("...................┌─┐.................┌─┐...................");
+                                    mapResult.add("...................│" + first + "│.................│"
+                                            + item.event().substring(0, 1) + "│...................");
+                                    mapResult.add("...................└─┘.................└─┘...................");
                                 }
                             }
                         }
@@ -153,19 +143,50 @@ public class Map {
                 }
                 default -> System.out.println(countNull);
             }
-            // for (int j = 0; j < map[i].length; j++) {
-            //     if (map[i][j] != null) {
-            //         System.out.print(map[i][j].event() + "          ");
-            //     }
-            //     else {
-            //         System.out.print(map[i][j] + "          ");
-            //     }
-            // }
-            // System.out.println();
         }
-        System.out.println();
+        mapResult.add(".............................................................");
+        mapResult.add("\n");
+        colorText("\u001B[34m", mapResult.size() - mapX - 3, mapY, mapResult.size() - mapX, mapY + 3);
+
+        // add greenery
+        Random rand = new Random();
+
+        int max = 5;
+        int min = 0;
+        String objects = "𐀛𐀗𐀂𐀭𐘃𐡗";
+        // for (String i : mapResult) {
+        for (int x = 0; x < mapResult.size(); x++) {
+            String i = mapResult.get(x);
+            int randomNum = rand.nextInt((max - min) + 1) + min;
+            for (int j = 0; j < randomNum; j++) {
+                int randomIdx = rand.nextInt((i.length() - 1 - min) + 1) + min;
+                if (i.charAt(randomIdx) == '.') {
+                    int randVal = rand.nextInt((objects.length() - 1));
+                    String randomObject = objects.substring(randVal, randVal + 1);
+                    mapResult.set(x, i.substring(0, randomIdx) + randomObject + i.substring(randomIdx + 1));
+                }
+            }
+        }
+        for (String i : mapResult) {
+            System.out.println(i);
+        }
+
     }
 
+    public void colorText(String color,
+            int startPosRow,
+            int startPosCol,
+            int endPosRow,
+            int endPosCol) {
+        if (startPosRow < 0)
+            startPosRow = 1;
+        for (int i = startPosRow; i < endPosRow; i++) {
+            String displayLine = mapResult.get(i).toString();
+            displayLine = displayLine.substring(0, startPosCol) + color + displayLine.substring(startPosCol, endPosCol)
+                    + "\u001B[0m" + displayLine.substring(endPosCol);
+            mapResult.set(i, new String(displayLine));
+        }
+    }
 
     public Stack<MapNode> shuffle(ArrayList<MapNode> deck1) {
         int index = 0;

@@ -1,0 +1,10 @@
+Check these off when you're done with them
+
+
+Sriman:
+Implement all cards and abilities, start on battle logic
+Jianyu:
+Finish render code, start on battle logic
+Omkar:
+Finish map logic
+

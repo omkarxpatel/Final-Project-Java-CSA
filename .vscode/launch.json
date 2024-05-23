@@ -9,6 +9,13 @@
             "name": "Game",
             "request": "launch",
             "mainClass": "Game",
+            "projectName": "Final-Project-Java-CSA_ef31e65f"
+        },
+        {
+            "type": "java",
+            "name": "Game",
+            "request": "launch",
+            "mainClass": "Game",
             "projectName": "Final-Project-Java-CSA_e07479d9"
         },
         {

@@ -27,31 +27,44 @@ public class Board {
 
     public int update() {
         for (int j = 0; j < board[0].length; j++) {
-            if (board[0][j] != null && board[1][j] != null) {
-                board[0][j].attackCard(board[1][j], board[0][j].getPower());
-                if (board[1][j].getHealth() <= 0) {
+
+            int power = board[0][j].getPower();
+            Card lCard = j == 0 ? null : board[0][j - 1];
+            Card rCard = j == 3 ? null : board[0][j + 1];
+            Card oCard = board[1][j];
+
+            if (lCard != null && lCard.getAbilities().contains("alpha")) {
+                power++;
+            }
+            if (rCard != null && rCard.getAbilities().contains("alpha")) {
+                power++;
+            }
+            if (oCard != null && oCard.getAbilities().contains("stinky")) {
+                power--;
+            }
+
+            if (board[0][j] != null) {
+                health += board[0][j].attackCard(board[1][j], power);
+
+                if (board[1][j] == null || board[1][j].getHealth() <= 0) {
                     board[1][j] = null;
                 }
             }
-            else if (board[0][j] != null && board[1][j] == null) {
-                health += board[0][j].getPower();
-                if (health >= 5) {
-                    return 1; // return to map
-                }
+            if (health >= 5) {
+                return 1; // return to map
             }
         }
         for (int j = 0; j < board[0].length; j++) {
-            if (board[1][j] != null && board[0][j] != null) {
-                board[1][j].attackCard(board[0][j], board[1][j].getPower());
-                if (board[0][j].getHealth() <= 0) {
+
+            if (board[1][j] != null) {
+                health += board[1][j].attackCard(board[0][j], board[1][j].getPower());
+
+                if (board[0][j] == null || board[0][j].getHealth() <= 0) {
                     board[0][j] = null;
                 }
             }
-            else if (board[1][j] != null && board[0][j] == null) {
-                health -= board[1][j].getPower();
-                if (health <= -5) {
-                    return -1; // return to game screen
-                }
+            if (health <= -5) {
+                return -1; // return to map
             }
         }
         return 0;
@@ -62,8 +75,7 @@ public class Board {
     public void changeBoard(boolean side, int location, Card new1) {
         if (side == true) {
             board[0][location] = new1;
-        }
-        else {
+        } else {
             board[1][location] = new1;
         }
     }

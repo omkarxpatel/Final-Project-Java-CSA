@@ -13,7 +13,7 @@ public class Render {
     private char lastCursorChar = (char) 0;
     private static char emptyChar = '.';
     private static String emptyLine = null;
-    private static char[] cursorChars = new char[] {'✦', };
+    private static char[] cursorChars = new char[] { '✦', };
     private static int cursor = 0;
     private static int lineLength = 61;
 
@@ -80,24 +80,24 @@ public class Render {
             "-------------------------------------------------------------"
     };
     private static String[] screenMap = new String[] {
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
-        ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
+            ".............................................................",
     };
     private static String[][] screens = new String[][] {
             screenTitle,
@@ -115,21 +115,20 @@ public class Render {
     }
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
-                new CursorPosition(0, 7, 13, "play", null),
-                new CursorPosition(0, 1, 30, "credits", null),
-                new CursorPosition(0, 7, 47, "continue", null)
+                    new CursorPosition(0, 7, 13, "play", null),
+                    new CursorPosition(0, 1, 30, "credits", null),
+                    new CursorPosition(0, 7, 47, "continue", null)
             },
             cursorPositionsDeck,
             {
-                new CursorPosition(2, 9, 26, "title", null)
+                    new CursorPosition(2, 9, 26, "title", null)
             },
             {
-                new CursorPosition(3,0,0,"test",null),
+                    new CursorPosition(3, 0, 0, "test", null),
             }
     };
 
     public Render() {
-        
 
         loadScreen(0);
         for (int i = 0; i < displayBuffer.size(); i++) {
@@ -163,7 +162,6 @@ public class Render {
         if (startPosRow < 0)
             startPosRow = 1;
 
-    
         String formatting;
         switch (format) {
             case "bold": {
@@ -189,7 +187,8 @@ public class Render {
         }
         for (int i = startPosRow; i < endPosRow; i++) {
             String displayLine = displayBuffer.get(i).toString();
-            displayLine = displayLine.substring(0, startPosCol) + formatting + displayLine.substring(startPosCol, endPosCol)
+            displayLine = displayLine.substring(0, startPosCol) + formatting
+                    + displayLine.substring(startPosCol, endPosCol)
                     + COLOR_WHITE + displayLine.substring(endPosCol);
             displayBuffer.set(i, new StringBuffer(displayLine));
         }
@@ -240,7 +239,7 @@ public class Render {
     }
 
     public void fillChar(int startPosRow, int startPosCol, int endPosRow, int endPosCol, char c) {
-        for (int i = startPosRow; i <= endPosRow; i++ ) {
+        for (int i = startPosRow; i <= endPosRow; i++) {
             for (int j = startPosCol; j <= endPosCol; j++) {
                 displayBuffer.get(i).setCharAt(j, c);
             }
@@ -298,7 +297,7 @@ public class Render {
             return;
         }
         String name = Character.toUpperCase(card.getName().charAt(0)) + card.getName().substring(1);
-        displayText(name, 1, 1 + (21-name.length()) / 2, 22);
+        displayText(name, 1, 1 + (21 - name.length()) / 2, 22);
         switch (card.getCostType()) {
             case 0: {
                 displayText(Character.toString(emptyChar), 2, 22, 1);
