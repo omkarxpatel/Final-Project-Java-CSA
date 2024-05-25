@@ -1,4 +1,3 @@
-import com.sun.tools.javac.Main;
 import java.util.*;
 
 public class Board {
@@ -26,45 +25,73 @@ public class Board {
     }
 
     public int update() {
-        for (int j = 0; j < board[0].length; j++) {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < board[0].length; j++) {
 
-            int power = board[0][j].getPower();
-            Card lCard = j == 0 ? null : board[0][j - 1];
-            Card rCard = j == 3 ? null : board[0][j + 1];
-            Card oCard = board[1][j];
+                
+                Card thisCard = board[i][j];
+                Card lCard = j == 0 ? null : board[i][j-1];
+                Card rCard = j == 3 ? null : board[i][j+1];
+                Card oCard = board[1-i][j];
+                Card loCard = j == 0 ? null : board[1-i][j-1];
+                Card roCard = j == 3 ? null : board[1-i][j+1];
 
-            if (lCard != null && lCard.getAbilities().contains("alpha")) {
-                power++;
-            }
-            if (rCard != null && rCard.getAbilities().contains("alpha")) {
-                power++;
-            }
-            if (oCard != null && oCard.getAbilities().contains("stinky")) {
-                power--;
-            }
-
-            if (board[0][j] != null) {
-                health += board[0][j].attackCard(board[1][j], power);
-
-                if (board[1][j] == null || board[1][j].getHealth() <= 0) {
-                    board[1][j] = null;
+                int power = thisCard.getPower();
+                ArrayList<String> abilities = thisCard.getAbilities();
+    
+                if (lCard != null && lCard.getAbilities().contains("alpha")) {
+                    power++;
                 }
-            }
-            if (health >= 5) {
-                return 1; // return to map
+                if (rCard != null && rCard.getAbilities().contains("alpha")) {
+                    power++;
+                }
+                if (oCard != null && oCard.getAbilities().contains("stinky")) {
+                    power--;
+                }
+    
+                if (thisCard != null) {
+                    ArrayList<Card> targets = new ArrayList<Card>();
+                    boolean doublestrike = abilities.contains("doublestrike");
+                    boolean triplestrike = abilities.contains("triplestrike");
+                    if (!doublestrike && 
+                        !triplestrike) {
+                            targets.add(oCard);
+                    }
+                    else {
+                        if (doublestrike) {
+                            if (!(j == 0)) targets.add(loCard);
+                            if (!(j == 3)) targets.add(roCard);
+                        }
+                        if (triplestrike) {
+                            if (!(j == 0)) targets.add(loCard);
+                            targets.add(loCard);
+                            if (!(j == 3)) targets.add(roCard);
+                        }
+                    }
+                    int[] results = board[i][j].attackCard((Card[])targets.toArray(), power);
+                    for (int r : results) {
+                        health += r;
+                    }
+    
+                    for (Card c : targets) {
+                        if (c == null || c.getHealth() <= 0) {
+                            c = null;
+                        }
+                    }
+                }
+
+                if (health >= 5) {
+                    return 1; // return to map
+                }
+                if (health <= -5) {
+                    return -1; // return to map
+                }
             }
         }
         for (int j = 0; j < board[0].length; j++) {
-
-            if (board[1][j] != null) {
-                health += board[1][j].attackCard(board[0][j], board[1][j].getPower());
-
-                if (board[0][j] == null || board[0][j].getHealth() <= 0) {
-                    board[0][j] = null;
-                }
-            }
-            if (health <= -5) {
-                return -1; // return to map
+            if (board[1][j] == null && board[2][j] != null) {
+                board[1][j] = board[2][j];
+                board[2][j] = null;
             }
         }
         return 0;

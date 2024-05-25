@@ -20,6 +20,8 @@ public class Card {
         airborne.add("airborne");
         ArrayList<String> doubleStrike = new ArrayList<String>();
         airborne.add("doublestrike");
+        ArrayList<String> tripleStrike = new ArrayList<String>();
+        airborne.add("triplestrike");
 
         cards.put("squirrel", new Card("squirrel", 1, 0, 0, 0, null));
         cards.put("adder", new Card("adder", 1, 1, 2, 1, (ArrayList<String>) deathTouch.clone()));
