@@ -142,6 +142,7 @@ public class Game {
             input = sc.nextLine();
             game.processInput(input);
             game.flush();
+            // System.out.println("𐀛𐀗𐀂𐀭𐘃𐡗");
         }
     }
 }

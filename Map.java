@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.*;
 
 public class Map {
     private int chapter;
+    private int nodeStep;
     private ArrayList<MapNode> nodeBuffer = new ArrayList<MapNode>();
     private static TreeMap<String, Card> cards = Card.cards;
     public static final Card[] CARD_POOL_COMMON = new Card[] {
@@ -38,7 +36,10 @@ public class Map {
         this.chapter = chapter;
         initNodes();
         randNodes();
-        printMap();
+        // ArrayList<String> map = getMap();
+        // for (String s : map) {
+        //     System.out.println(s);
+        // }
     }
 
     public void initNodes() {
@@ -85,8 +86,10 @@ public class Map {
         }
     }
 
-    public void printMap() {
+    public ArrayList<String> getMap() {
         // for (MapNode[] map1 : map) {
+
+        mapResult = new ArrayList<String>();
 
         for (int i = 0; i < map.length; i++) {
             MapNode[] map1 = map[i];
@@ -153,7 +156,7 @@ public class Map {
 
         int max = 5;
         int min = 0;
-        String objects = "𐀛𐀗𐀂𐀭𐘃𐡗";
+        String objects = "↟𐀛𐀗𐀂𐀭𐘃𖣂";
         // for (String i : mapResult) {
         for (int x = 0; x < mapResult.size(); x++) {
             String i = mapResult.get(x);
@@ -167,9 +170,10 @@ public class Map {
                 }
             }
         }
-        for (String i : mapResult) {
-            System.out.println(i);
-        }
+        return mapResult;
+        // for (String i : mapResult) {
+        //     System.out.println(i);
+        // }
 
     }
 

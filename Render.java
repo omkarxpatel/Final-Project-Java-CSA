@@ -26,6 +26,7 @@ public class Render {
 
     private static final String COLOR_WHITE = "\u001B[0m";
     private static String[] screenTitle = new String[] {
+            "-------------------------------------------------------------",
             ".............................................................",
             ".............................................................",
             ".............................................................",
@@ -40,7 +41,7 @@ public class Render {
             ".............................................................",
             ".............................................................",
             ".............................................................",
-            "............................................................."
+            "-------------------------------------------------------------",
     };
     private static String[] screenDeck = new String[] {
             "-------------------------------------------------------------",
@@ -51,9 +52,7 @@ public class Render {
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
-            "│......................│.....................................",
             "│......................│....................................>",
-            "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
@@ -109,15 +108,15 @@ public class Render {
     public static CursorPosition[] cursorPositionsDeck = new CursorPosition[22];
     static {
         for (int i = 0; i < 21; i++) {
-            cursorPositionsDeck[i] = new CursorPosition(1, 6 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
+            cursorPositionsDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
         }
-        cursorPositionsDeck[21] = new CursorPosition(1, 7, 60, "exitDeck", null);
+        cursorPositionsDeck[21] = new CursorPosition(1, 6, 60, "exitDeck", null);
     }
     public static final CursorPosition[][] CURSOR_PAIRS = new CursorPosition[][] {
             {
-                    new CursorPosition(0, 7, 13, "play", null),
-                    new CursorPosition(0, 1, 30, "credits", null),
-                    new CursorPosition(0, 7, 47, "continue", null)
+                    new CursorPosition(0, 8, 13, "play", null),
+                    new CursorPosition(0, 2, 30, "credits", null),
+                    new CursorPosition(0, 8, 47, "continue", null)
             },
             cursorPositionsDeck,
             {
@@ -292,7 +291,7 @@ public class Render {
     }
 
     public void displayCardBig(Card card) {
-        fillChar(1, 1, 17, 22, emptyChar);
+        fillChar(1, 1, 15, 22, emptyChar);
         if (card == null) {
             return;
         }
@@ -304,11 +303,19 @@ public class Render {
                 break;
             }
             case 1: {
-                displayText("‡", 2, 22, 1);
+                displayText(card.getCost() + "", 1, 22, 2);
+                displayText("❢", 2, 22, 1);
                 break;
             }
+            case 2: {
+                displayText(card.getCost() + "", 1, 22, 2);
+                displayText("✖", 2, 22, 1);
+                break;
+            }
+            
         }
-        displayText(card.getHealth() + "", 16, 1, 2);
+        displayText(card.getHealth() + "", 14, 1, 2);
+        displayText("♥", 15,1,1);
     }
 
     public void flush() {
