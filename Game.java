@@ -69,7 +69,9 @@ public class Game {
                         player = new Player(initCards);
                         deckDrawCards();
                         hoverAction();
-                        render.displayText("THIS IS YOUR STARTING DECK. ", 7, 25, 30);
+                        render.displayText("STARTING DECK. ", 7, 25, 30);
+                        render.displayText("<HEALTH ", 14, 4, 30);
+                        render.displayText("POWER>", 15, 14, 30);
                         break;
                     }
                     case "exitDeck": {

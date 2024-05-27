@@ -316,6 +316,9 @@ public class Render {
         }
         displayText(card.getHealth() + "", 14, 1, 2);
         displayText("♥", 15,1,1);
+
+        displayText(card.getPower() + "", 14, 22, 2);
+        displayText("⚔", 15,22,1);
     }
 
     public void flush() {
