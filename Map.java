@@ -36,10 +36,6 @@ public class Map {
         this.chapter = chapter;
         initNodes();
         randNodes();
-        // ArrayList<String> map = getMap();
-        // for (String s : map) {
-        // System.out.println(s);
-        // }
     }
 
     /**
@@ -118,6 +114,7 @@ public class Map {
         // for (MapNode[] map1 : map) {
 
         mapResult = new ArrayList<String>();
+        String white = "\u001B[0m";
 
         for (int i = 0; i < map.length; i++) {
             MapNode[] map1 = map[i];
@@ -138,7 +135,6 @@ public class Map {
                     for (MapNode item : map1) {
                         if (item != null) {
                             String color = "";
-                            String white = "\u001B[0m";
                             if (map1.equals(map[0]))
                                 color = "\u001B[31m"; // for final boss
                             mapResult.add("............................." + color + "┌─┐" + white
@@ -182,48 +178,65 @@ public class Map {
         // add greenery
         Random rand = new Random();
 
-        int max = 5;
+        int max = 20;
         int min = 0;
-        String objects = "↟𐀛𐀗𐀂𐀭𐘃𖣂";
-        // for (String i : mapResult) {
+        // String objects = "↟𐀛𐀗𐀂𐀭𐘃𖣂";
+        String objects = "❀❃⚘☘";
+
         for (int x = 0; x < mapResult.size(); x++) {
             String i = mapResult.get(x);
             int randomNum = rand.nextInt((max - min) + 1) + min;
+
             for (int j = 0; j < randomNum; j++) {
                 int randomIdx = rand.nextInt((i.length() - 1 - min) + 1) + min;
                 if (i.charAt(randomIdx) == '.') {
-                    int randVal = rand.nextInt((objects.length() - 1));
+                    int randVal = rand.nextInt((objects.length()));
                     String randomObject = objects.substring(randVal, randVal + 1);
-                    mapResult.set(x, i.substring(0, randomIdx) + randomObject + i.substring(randomIdx + 1));
+                    System.out.println(randomObject);
+                    mapResult.set(x,
+                            i.substring(0, randomIdx) + white + randomObject + white + i.substring(randomIdx + 1));
                 }
             }
         }
+
+        for (String i : mapResult) {
+            System.out.println(i);
+        }
         return mapResult;
-        // for (String i : mapResult) {
-        // System.out.println(i);
-        // }
 
     }
 
     /**
      * This function colors a specified range of text in a multi-line display.
      * 
-     * @param color The `color` parameter in the `colorText` method is a String that represents the
-     * color you want to apply to the text. This could be a color code, such as "\u001B[31m" for red,
-     * "\u001B[32m" for green, etc.,
-     * @param startPosRow The `startPosRow` parameter specifies the starting row index for coloring the
-     * text in the `mapResult` list. If the `startPosRow` is less than 0, it is set to 1 to ensure it
-     * is within a valid range. The method then iterates over the rows
-     * @param startPosCol The `startPosCol` parameter in the `colorText` method represents the starting
-     * column position where the color should be applied within the text of each line specified by the
-     * `startPosRow` and `endPosRow` parameters.
-     * @param endPosRow The `endPosRow` parameter represents the ending row position for the text
-     * colorization in the `colorText` method. It indicates the row number where the colorization
-     * should stop.
-     * @param endPosCol The `endPosCol` parameter in the `colorText` method represents the ending
-     * column position where the color should be applied in the text. The method takes a color as input
-     * and applies that color to the specified range of text within the specified rows and columns in
-     * the `mapResult` data structure
+     * @param color       The `color` parameter in the `colorText` method is a
+     *                    String that represents the
+     *                    color you want to apply to the text. This could be a color
+     *                    code, such as "\u001B[31m" for red,
+     *                    "\u001B[32m" for green, etc.,
+     * @param startPosRow The `startPosRow` parameter specifies the starting row
+     *                    index for coloring the
+     *                    text in the `mapResult` list. If the `startPosRow` is less
+     *                    than 0, it is set to 1 to ensure it
+     *                    is within a valid range. The method then iterates over the
+     *                    rows
+     * @param startPosCol The `startPosCol` parameter in the `colorText` method
+     *                    represents the starting
+     *                    column position where the color should be applied within
+     *                    the text of each line specified by the
+     *                    `startPosRow` and `endPosRow` parameters.
+     * @param endPosRow   The `endPosRow` parameter represents the ending row
+     *                    position for the text
+     *                    colorization in the `colorText` method. It indicates the
+     *                    row number where the colorization
+     *                    should stop.
+     * @param endPosCol   The `endPosCol` parameter in the `colorText` method
+     *                    represents the ending
+     *                    column position where the color should be applied in the
+     *                    text. The method takes a color as input
+     *                    and applies that color to the specified range of text
+     *                    within the specified rows and columns in
+     *                    the `mapResult` data structure
      */
     public void colorText(String color,
             int startPosRow,
@@ -241,7 +254,8 @@ public class Map {
     }
 
     /**
-     * The function shuffles an ArrayList of MapNode objects and returns a Stack containing the
+     * The function shuffles an ArrayList of MapNode objects and returns a Stack
+     * containing the
      * shuffled elements.
      * 
      * @param deck1 The `deck1` parameter is an `ArrayList` of `MapNode` objects.

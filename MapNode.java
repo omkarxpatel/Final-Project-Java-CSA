@@ -5,15 +5,10 @@ public class MapNode {
     private String event;
     private ArrayList<MapNode> connections;
 
-    public MapNode(int chapter) {
-        this.chapter = chapter;
-        event = "boss";
-        connections = new ArrayList<MapNode>();
-    }
-
     public MapNode(int chapter, String event) {
-        this(chapter);
+        this.chapter = chapter;
         this.event = event;
+        connections = null;
     }
 
     public MapNode(int chapter, String event, ArrayList<MapNode> connections) {

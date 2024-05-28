@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class Test {
+public class Map2 {
     private int chapter;
     private int progress;
-    private int posNode;
-    private String[] layouts = new String[] { "11212321211321", "113211213211", "122113112211", "131" };
+    private int pos;
+    private String[] layouts = new String[] { "11212321212321", "1132112113211", "122113112211", "131" };
     private MapNode[][] nodes;
     private static String[] nonBattleNodes = new String[] {
             "campfire",
@@ -16,7 +16,7 @@ public class Test {
             "items"
     };
 
-    public Test(int chapter) {
+    public Map2(int chapter) {
         progress = 0;
         posNode = 0;
 
@@ -39,5 +39,13 @@ public class Test {
 
     public MapNode[][] getNodes() {
         return nodes;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public int getPos() {
+        return pos;
     }
 }

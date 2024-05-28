@@ -9,6 +9,8 @@ public class Card {
     private int costType;
     private ArrayList<String> abilities;
     public static TreeMap<String, Card> cards = new TreeMap<String, Card>();
+    // Caused by: java.lang.NullPointerException: Cannot invoke
+    // "java.util.TreeMap.get(Object)" because "Map.cards" is null
     public static TreeMap<String, String> descriptions = new TreeMap<String, String>();
 
     static {
@@ -24,6 +26,18 @@ public class Card {
         tripleStrike.add("triplestrike");
         ArrayList<String> antSpawner = new ArrayList<String>();
         antSpawner.add("antspawner");
+        ArrayList<String> ant = new ArrayList<String>();
+        ant.add("ant");
+        ArrayList<String> damBuilder = new ArrayList<String>();
+        damBuilder.add("damBuilder");
+        ArrayList<String> beesWithin = new ArrayList<String>();
+        beesWithin.add("beeswithin");
+        ArrayList<String> cagedWolf = new ArrayList<String>();
+        cagedWolf.add("cagedwolf");
+        ArrayList<String> manyLives = new ArrayList<String>();
+        manyLives.add("manylives");
+        ArrayList<String> stinky = new ArrayList<String>();
+        stinky.add("stinky");
 
         cards.put("squirrel", new Card("squirrel", 1, 0, 0, 0, null));
         cards.put("adder", new Card("adder", 1, 1, 2, 1, (ArrayList<String>) deathTouch.clone()));
@@ -32,7 +46,19 @@ public class Card {
         cards.put("bullfrog", new Card("bullfrog", 2, 1, 1, 1, (ArrayList<String>) leap.clone()));
         cards.put("sparrow", new Card("sparrow", 1, 2, 1, 1, (ArrayList<String>) airborne.clone()));
         cards.put("mantis", new Card("mantis", 1, 1, 1, 1, (ArrayList<String>) doubleStrike.clone()));
-        cards.put("antqueen", new Card("ant queen", 3, 1, 2, 1, (ArrayList<String>) antSpawner.clone())); 
+        cards.put("antqueen", new Card("ant queen", 3, 1, 2, 1, (ArrayList<String>) antSpawner.clone()));
+        cards.get("antqueen").getAbilities().add("ant");
+        cards.put("ant", new Card("ant", 2, 1, 1, 1, (ArrayList<String>) ant.clone()));
+        cards.put("beaver", new Card("beaver", 4, 1, 1, 2, (ArrayList<String>) damBuilder.clone()));
+        cards.put("dam", new Card("dam", 2, 0, 0, 0, null));
+        cards.put("bee", new Card("bee", 1, 1, 0, 0, (ArrayList<String>) airborne.clone()));
+        cards.put("beehive", new Card("bee hive", 2, 0, 1, 1, (ArrayList<String>) beesWithin.clone()));
+        cards.put("cagedwolf", new Card("caged wolf", 6, 0, 2, 1, (ArrayList<String>) cagedWolf.clone()));
+        cards.put("cat", new Card("cat", 1, 0, 1, 1, (ArrayList<String>) manyLives.clone()));
+        cards.put("coyote", new Card("coyote", 2, 1, 4, 2, null));
+        cards.put("child13", new Card("child13", 1, 0, 1, 1, (ArrayList<String>) manyLives.clone()));
+        cards.put("skunk", new Card("skunk", 0, 3, 1, 1, (ArrayList<String>) stinky.clone()));
+        cards.put("turkeyvulture", new Card("turkey vulture", 3, 3, 8, 2, (ArrayList<String>) airborne.clone()));
     }
 
     public Card(String name,
