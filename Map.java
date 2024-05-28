@@ -38,10 +38,15 @@ public class Map {
         randNodes();
         // ArrayList<String> map = getMap();
         // for (String s : map) {
-        //     System.out.println(s);
+        // System.out.println(s);
         // }
     }
 
+    /**
+     * The `initNodes` function randomly adds nodes related to different events in a
+     * game, such as
+     * battles, sacrifices, campfires, and trials.
+     */
     public void initNodes() {
         for (int i = 0; i < 5 + (int) (3 * Math.random()); i++) {
             addNode("battle");
@@ -65,6 +70,17 @@ public class Map {
         addNode("items");
     }
 
+    /**
+     * The `addNode` function adds a new `MapNode` object to the `nodeBuffer` list
+     * with the given `event`
+     * and `chapter` values.
+     * 
+     * @param event The `event` parameter in the `addNode` method represents the
+     *              event that you want to
+     *              associate with the new `MapNode` being added to the
+     *              `nodeBuffer`. This event could be any relevant
+     *              information or data that you want to store within the `MapNode`.
+     */
     private void addNode(String event) {
         nodeBuffer.add(new MapNode(chapter, event));
     }
@@ -86,6 +102,18 @@ public class Map {
         }
     }
 
+    /**
+     * The `getMap` function generates a map layout with different elements and
+     * decorations, including
+     * random greenery objects, and returns it as an ArrayList of strings.
+     * 
+     * @return The `getMap()` method returns an `ArrayList<String>` named
+     *         `mapResult` containing a map
+     *         representation with various symbols and colors. The method generates
+     *         the map based on the data
+     *         in the `map` array, adds decorations like greenery represented by
+     *         symbols like "↟𐀛𐀗𐀂𐀭𐘃𖣂",
+     */
     public ArrayList<String> getMap() {
         // for (MapNode[] map1 : map) {
 
@@ -172,11 +200,31 @@ public class Map {
         }
         return mapResult;
         // for (String i : mapResult) {
-        //     System.out.println(i);
+        // System.out.println(i);
         // }
 
     }
 
+    /**
+     * This function colors a specified range of text in a multi-line display.
+     * 
+     * @param color The `color` parameter in the `colorText` method is a String that represents the
+     * color you want to apply to the text. This could be a color code, such as "\u001B[31m" for red,
+     * "\u001B[32m" for green, etc.,
+     * @param startPosRow The `startPosRow` parameter specifies the starting row index for coloring the
+     * text in the `mapResult` list. If the `startPosRow` is less than 0, it is set to 1 to ensure it
+     * is within a valid range. The method then iterates over the rows
+     * @param startPosCol The `startPosCol` parameter in the `colorText` method represents the starting
+     * column position where the color should be applied within the text of each line specified by the
+     * `startPosRow` and `endPosRow` parameters.
+     * @param endPosRow The `endPosRow` parameter represents the ending row position for the text
+     * colorization in the `colorText` method. It indicates the row number where the colorization
+     * should stop.
+     * @param endPosCol The `endPosCol` parameter in the `colorText` method represents the ending
+     * column position where the color should be applied in the text. The method takes a color as input
+     * and applies that color to the specified range of text within the specified rows and columns in
+     * the `mapResult` data structure
+     */
     public void colorText(String color,
             int startPosRow,
             int startPosCol,
@@ -192,6 +240,13 @@ public class Map {
         }
     }
 
+    /**
+     * The function shuffles an ArrayList of MapNode objects and returns a Stack containing the
+     * shuffled elements.
+     * 
+     * @param deck1 The `deck1` parameter is an `ArrayList` of `MapNode` objects.
+     * @return A shuffled stack of MapNode objects is being returned.
+     */
     public Stack<MapNode> shuffle(ArrayList<MapNode> deck1) {
         int index = 0;
         Stack<MapNode> returnDeck = new Stack<MapNode>();

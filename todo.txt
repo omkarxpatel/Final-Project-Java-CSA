@@ -1,5 +1,7 @@
 Check these off when you're done with them
 
+To create javadocs
+javadoc -d docs *.java
 
 Sriman:
 Implement all cards and abilities, start on battle logic

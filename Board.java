@@ -5,15 +5,26 @@ public class Board {
     private Stack<Card> deck;
     private Card[][] board;
     private Player currentPlayer;
+    private int bones = 0;
 
+    
     public Board(Player currentPlayer1) {
         health = 0;
-        board = new Card[2][4];
+        board = new Card[3][4];
         currentPlayer = currentPlayer1;
         deck = shuffle(currentPlayer.getCards());
-
     }
 
+    /**
+     * The function `shuffle` takes an ArrayList of Card objects, shuffles the cards randomly, and
+     * returns a Stack of shuffled cards.
+     * 
+     * @param deck1 The parameter `deck1` is an `ArrayList` of `Card` objects representing a deck of
+     * cards that you want to shuffle. The method `shuffle` takes this deck as input, shuffles the
+     * cards randomly, and returns a `Stack` of `Card` objects representing the shuffled deck.
+     * @return The `shuffle` method returns a `Stack` of `Card` objects after shuffling the input
+     * `ArrayList` of `Card` objects.
+     */
     public static Stack<Card> shuffle(ArrayList<Card> deck1) {
         int index = 0;
         Stack<Card> returnDeck = new Stack<Card>();
@@ -24,6 +35,16 @@ public class Board {
         return returnDeck;
     }
 
+    /**
+     * The update function iterates through a 2D board of cards, applying various abilities and attacks
+     * based on card properties and conditions, and returns different values based on health
+     * conditions.
+     * 
+     * @return The method `update()` returns an integer value. If the condition `health >= 5` is met,
+     * it returns `1` which indicates to return to the map. If the condition `health <= -5` is met, it
+     * returns `-1` which also indicates to return to the map. If neither of these conditions is met,
+     * it returns `0`.
+     */
     public int update() {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < board[0].length; j++) {
@@ -35,10 +56,13 @@ public class Board {
                 Card oCard = board[1-i][j];
                 Card loCard = j == 0 ? null : board[1-i][j-1];
                 Card roCard = j == 3 ? null : board[1-i][j+1];
-
+                int count = 0;
                 int power = thisCard.getPower();
                 ArrayList<String> abilities = thisCard.getAbilities();
-    
+                if (abilities.contains("antspawner")) {
+                    count = 0;
+                    for (int i)
+                }
                 if (lCard != null && lCard.getAbilities().contains("alpha")) {
                     power++;
                 }
@@ -99,18 +123,48 @@ public class Board {
 
     // location is index in the array, 0 for very last and 4 for last
     // side true for player false forAI
-    public void changeBoard(boolean side, int location, Card new1) {
-        if (side == true) {
+    /**
+     * The function `changeBoard` updates a card at a specific location on the game board based on the
+     * side provided.
+     * 
+     * @param side The `side` parameter in the `changeBoard` method represents the side of the board
+     * where the new card `new1` will be placed. It is an integer value that determines whether the
+     * card will be placed on the top side (side 0), bottom side (side 1), or
+     * @param location The `location` parameter in the `changeBoard` method represents the position
+     * within the board where the new card (`new1`) will be placed. It is an integer value that
+     * specifies the column index in the board array where the card will be updated.
+     * @param new1 `new1` is a parameter of type `Card` that represents the new card that will be
+     * placed on the board at the specified location and side.
+     */
+    public void changeBoard(int side, int location, Card new1) {
+        if (new1.getAbilities().contains(""))
+        
+        if (side == 0) {
             board[0][location] = new1;
-        } else {
+        } 
+        else if (side == 1) {
             board[1][location] = new1;
         }
+        else {
+            board[2][location] = new1; 
+        }
+
     }
 
+    /**
+     * The draw function draws a card from the deck and assigns it to the current player.
+     */
     public void draw() {
         currentPlayer.draw(deck.pop());
     }
 
+    /**
+     * The `sacrifice` function in Java removes a piece from the specified location on the board.
+     * 
+     * @param location The `location` parameter in the `sacrifice` method represents the column index
+     * in a 2D array called `board`. The method sets the value at the first row and the specified
+     * column index to `null`, essentially removing the piece at that location on the board.
+     */
     public void sacrifice(int location) {
         board[0][location] = null;
     }
@@ -118,10 +172,23 @@ public class Board {
     public static void main(String[] args) {
     }
 
+    /**
+     * The `playCard` function takes a list of sacrifices, a new card, and a location, sacrifices the
+     * specified cards, and then changes the board by placing the new card at the specified location.
+     * 
+     * @param sacrifices The `sacrifices` parameter is an ArrayList of Integers that represents the
+     * cards being sacrificed in order to play the new card. The `playCard` method iterates through
+     * each Integer in the `sacrifices` list and calls the `sacrifice` method for each card
+     * @param new1 `new1` is an object of type `Card` that represents the new card being played on the
+     * board.
+     * @param location The `location` parameter in the `playCard` method represents the position on the
+     * board where the new card will be played. It is an integer value that specifies the index or
+     * position where the `new1` card will be placed on the board.
+     */
     public void playCard(ArrayList<Integer> sacrifices, Card new1, int location) {
         for (int i : sacrifices) {
             sacrifice(i);
         }
-        changeBoard(true, location, new1);
+        changeBoard(0, location, new1);
     }
 }

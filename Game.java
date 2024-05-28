@@ -22,6 +22,15 @@ public class Game {
         cursorPositions = Render.CURSOR_PAIRS[screen];
     }
 
+    /**
+     * The `processInput` function in Java handles different input cases to perform actions such as
+     * navigating screens, initializing player cards, and displaying text.
+     * 
+     * @param input The `processInput` method you provided seems to handle different actions based on
+     * the input provided. The input parameter is a String that represents the user's input, such as
+     * "a", "d", or "s". The method uses a switch statement to determine the action to take based on
+     * the input
+     */
     public void processInput(String input) {
         // TODO
         switch (input) {
@@ -85,6 +94,10 @@ public class Game {
                 break;
         }
     }
+/**
+ * The `hoverAction` function checks for a specific action related to hovering over a card in a deck
+ * and displays the card if the action is valid.
+ */
 
     public void hoverAction() {
         String action = Render.CURSOR_PAIRS[screen][selected].hover();
@@ -102,6 +115,10 @@ public class Game {
             }
         }
     }
+/**
+ * The `deckDrawCards` function displays a player's cards on the screen in a row if the player has less
+ * than 7 cards.
+ */
 
     public void deckDrawCards() {
         ArrayList<Card> cards = player.getCards();
@@ -114,6 +131,14 @@ public class Game {
             }
         }
     }
+/**
+ * The `gotoScreen` function sets the current screen, loads the screen content, displays the cursor,
+ * and updates cursor positions.
+ * 
+ * @param screenIndex The `screenIndex` parameter in the `gotoScreen` method represents the index of
+ * the screen that you want to navigate to. This method sets the `screen` variable to the specified
+ * `screenIndex`, resets the `selected` variable to 0, loads the screen content using the `render.load
+ */
 
     public void gotoScreen(int screenIndex) {
         screen = screenIndex;
@@ -122,11 +147,18 @@ public class Game {
         render.displayCursor(screen, selected);
         cursorPositions = Render.CURSOR_PAIRS[screen];
     }
+/**
+ * The `flush` function calls the `flush` method of the `render` object.
+ */
 
     public void flush() {
         render.flush();
     }
 
+    /**
+     * The main function initializes game components and continuously processes user input to interact
+     * with the game world.
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Render r = new Render();
