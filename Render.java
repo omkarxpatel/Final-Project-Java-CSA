@@ -99,7 +99,6 @@ public class Render {
             ".............................................................",
             ".............................................................",
             ".............................................................",
-            ".............................................................",
     };
     private static String[][] screens = new String[][] {
             screenTitle,
@@ -542,8 +541,83 @@ public class Render {
         displayText("⚔", 15, 22, 1);
     }
 
+    private void drawNode(int posRow, int posCol, String node) {
+        String line;
+
+        line = displayBuffer.get(posRow).toString();
+        line = replaceAt(posCol, posCol + 3, line, "┌─┐");
+        displayBuffer.set(posRow, new StringBuffer(line));
+
+        char nodeChar = ' ';
+        switch (node) {
+            case "campfire": {
+                nodeChar = '♨';
+                break;
+            }
+            case "choice": {
+                nodeChar = '+';
+                break;
+            }
+            case "trial": {
+                nodeChar = '☗';
+                break;
+            }
+            case "altar": {
+                nodeChar = '✘';
+                break;
+            }
+            case "sacrifice": {
+                nodeChar = '⊼';
+                break;
+            }
+        }
+
+
+        line = displayBuffer.get(posRow + 1).toString();
+        line = replaceAt(posCol, posCol + 3, line, "│" + nodeChar + "│");
+        displayBuffer.set(posRow + 1, new StringBuffer(line));
+
+        line = displayBuffer.get(posRow + 2).toString();
+        line = replaceAt(posCol, posCol + 3, line, "│" + nodeChar + "│");
+        displayBuffer.set(posRow + 2, new StringBuffer(line));
+
+    }
+
     public void displayMap(Map map) {
-        
+        MapNode[][] nodes = map.getNodes();
+        int progress = map.getProgress();
+        int pos = map.getPos();
+        int chapter = map.getChapter();
+        String[] layouts = Map.LAYOUTS;
+        int x = 0;
+        for (int i = progress; i < nodes.length && i < progress + 3; i++) {
+            int width = Integer.parseInt(layouts[i]);
+            switch (width) {
+
+            }
+            x++;
+        }
+
+        String decor;
+        switch (chapter) {
+            case 1: {
+                decor = "↟𐀛𐀗𐀂𐀭𐘃𖣂ᛉ";
+                break;
+            }
+            case 2: {
+                decor = "~•ᚠᛁ";
+                break;
+            }
+            case 3: {
+                decor = "^|";
+                break;
+            }
+            default: {
+                decor = "/\\";
+                break;
+            }
+        }
+
     }
 
     /**
