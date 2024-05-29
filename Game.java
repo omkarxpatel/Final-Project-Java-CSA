@@ -90,6 +90,8 @@ public class Game {
                     case "exitDeck": {
                         gotoScreen(3);
                         render.displayMap(map);
+                        cursorPositions = Render.cursorPairs[screen];
+                        render.displayCursor(screen, selected);
                         break;
                     }
                 }
@@ -182,6 +184,9 @@ public class Game {
         Map m = new Map(1);
         Game game = new Game(b, p, m, r); // TODO
         String input = null;
+
+        int progress = m.getProgress();
+        int pos = m.getPos();
 
         game.flush();
         while (true) {

@@ -578,7 +578,7 @@ public class Render {
         displayBuffer.set(posRow + 1, new StringBuffer(line));
 
         line = displayBuffer.get(posRow + 2).toString();
-        line = replaceAt(posCol, posCol + 3, line, "│" + nodeChar + "│");
+        line = replaceAt(posCol, posCol + 3, line, "└─┘");
         displayBuffer.set(posRow + 2, new StringBuffer(line));
 
     }
@@ -590,12 +590,54 @@ public class Render {
         int chapter = map.getChapter();
         String[] layouts = Map.LAYOUTS;
         int x = 0;
+        fillChar(0, 0, 16, 60, emptyChar);
         for (int i = progress; i < nodes.length && i < progress + 3; i++) {
-            int width = Integer.parseInt(layouts[i]);
+            int width = Integer.parseInt(layouts[chapter].charAt(i) + "");
             switch (width) {
-
+                case 1: {
+                    drawNode(13 - 5 * x,29, nodes[i][0].event());
+                    break;
+                }
+                case 2: {
+                    drawNode(13 - 5 * x,24, nodes[i][0].event());
+                    drawNode(13 - 5 * x,34, nodes[i][1].event());
+                    break;
+                }
+                case 3: {
+                    drawNode(13 - 5 * x,19, nodes[i][0].event());
+                    drawNode(13 - 5 * x,29, nodes[i][0].event());
+                    drawNode(13 - 5 * x,39, nodes[i][1].event());
+                    break;
+                }
             }
+
             x++;
+        }
+
+        if (progress < nodes.length - 1) {
+            
+            int width = Integer.parseInt(layouts[chapter].charAt(progress + 1) + "");
+            CursorPosition[] newPositions = new CursorPosition[width];
+            switch (width) {
+                case 1: {
+
+                    newPositions[0] = new CursorPosition(3,7,30, "node", null);
+                    break;
+                }
+                case 2: {
+                    newPositions[0] = new CursorPosition(3,7,25, "node", null);
+                    newPositions[1] = new CursorPosition(3,7,35, "node", null);
+                    break;
+                }
+                case 3: {
+                    newPositions[0] = new CursorPosition(3,7,20, "node", null);
+                    newPositions[1] = new CursorPosition(3,7,30, "node", null);
+                    newPositions[2] = new CursorPosition(3,7,40, "node", null);
+                    break;
+                }
+            }
+
+            cursorPairs[3] = newPositions;
         }
 
         String decor;
@@ -617,6 +659,8 @@ public class Render {
                 break;
             }
         }
+
+
 
     }
 

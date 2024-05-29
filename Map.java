@@ -4,7 +4,7 @@ public class Map {
     private int chapter;
     private int progress;
     private int pos;
-    public static final String[] LAYOUTS = new String[] {"11212321212321", "1132112113211", "122113112211", "131" };
+    public static final String[] LAYOUTS = new String[] {"1212321212321", "1132112113211", "122113112211", "131" };
     private MapNode[][] nodes;
     private static String[] nonBattleNodes = new String[] {
             "campfire",
@@ -24,10 +24,10 @@ public class Map {
         nodes[0][0] = new MapNode(chapter, "empty", null);
 
         for (int i = 1; i < nodes.length - 1; i++) {
-            if (layout[i] == 1) {
+            if (layout[i] == '1') {
                 nodes[i][0] = new MapNode(chapter, "battle");
             } else {
-                for (int j = 0; j < layout[i]; j++) {
+                for (int j = 0; j < Integer.parseInt(layout[i] + ""); j++) {
                     nodes[i][j] = new MapNode(chapter, nonBattleNodes[(int) (nonBattleNodes.length * Math.random())]);
                 }
             }
