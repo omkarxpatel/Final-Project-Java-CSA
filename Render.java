@@ -109,7 +109,7 @@ public class Render {
 
     public static CursorPosition[] cursorPositionsDeck = new CursorPosition[22];
     static {
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i <= 20; i++) {
             cursorPositionsDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
         }
         cursorPositionsDeck[21] = new CursorPosition(1, 6, 60, "exitDeck", null);
@@ -688,16 +688,20 @@ public class Render {
         return currentSelected;
     }
 
-    public static void main(String[] args) {
-        Render r = new Render();
-        r.loadScreen(0);
-        r.formatText("underline", 3, 22, 5, 39); // preset for inscrption
-        // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
-        // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
-        // r.displayCard(1,1,"", 0, 0, 0, new ArrayList<String>());
-        r.flush();
-        // System.out.println("\u001b[4mTest\u001b[0mTest");
+    public void setLastCursorChar(char c) {
+        lastCursorChar = c;
     }
+
+    // public static void main(String[] args) {
+    //     Render r = new Render();
+    //     r.loadScreen(0);
+    //     r.formatText("underline", 3, 22, 5, 39); // preset for inscrption
+    //     // r.colorText("\u001B[32m", 9, 10, 11, 17); // preset for play
+    //     // r.colorText("\u001B[34m", 9, 50, 11, 63); // preset for play
+    //     // r.displayCard(1,1,"", 0, 0, 0, new ArrayList<String>());
+    //     r.flush();
+    //     // System.out.println("\u001b[4mTest\u001b[0mTest");
+    // }
 
     /**
      * The function replaces a substring in a given string with a new substring
