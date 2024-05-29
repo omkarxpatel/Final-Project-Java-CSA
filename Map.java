@@ -15,6 +15,7 @@ public class Map {
     };
 
     public Map(int chapter) {
+        this.chapter = chapter;
         progress = 0;
         pos = 0;
 
@@ -31,6 +32,9 @@ public class Map {
                     nodes[i][j] = new MapNode(chapter, nonBattleNodes[(int) (nonBattleNodes.length * Math.random())]);
                 }
             }
+        }
+        if (chapter == 1) {
+            
         }
         nodes[nodes.length - 1][0] = new MapNode(chapter, "boss" + chapter, null);
     }

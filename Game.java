@@ -36,7 +36,6 @@ public class Game {
      *              the input
      */
     public void processInput(String input) {
-        // TODO
         switch (input) {
             case "a": {
                 if (cursorPositions.length == 1) {

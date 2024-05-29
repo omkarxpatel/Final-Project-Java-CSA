@@ -570,6 +570,10 @@ public class Render {
                 nodeChar = '⊼';
                 break;
             }
+            case "battle": {
+                nodeChar = '⚖';
+                break;
+            }
         }
 
 
@@ -592,7 +596,7 @@ public class Render {
         int x = 0;
         fillChar(0, 0, 16, 60, emptyChar);
         for (int i = progress; i < nodes.length && i < progress + 3; i++) {
-            int width = Integer.parseInt(layouts[chapter].charAt(i) + "");
+            int width = Integer.parseInt(layouts[chapter - 1].charAt(i) + "");
             switch (width) {
                 case 1: {
                     drawNode(13 - 5 * x,29, nodes[i][0].event());
@@ -615,8 +619,7 @@ public class Render {
         }
 
         if (progress < nodes.length - 1) {
-            
-            int width = Integer.parseInt(layouts[chapter].charAt(progress + 1) + "");
+            int width = Integer.parseInt(layouts[chapter - 1].charAt(progress + 1) + "");
             CursorPosition[] newPositions = new CursorPosition[width];
             switch (width) {
                 case 1: {
@@ -640,10 +643,14 @@ public class Render {
             cursorPairs[3] = newPositions;
         }
 
+        int currentPosRow;
+        int width = Integer.parseInt(layouts[chapter - 1].charAt(progress) + "");
+        displayBuffer.get(12).setCharAt(35 - (5 * width) + 10 * pos, '↓');
+
         String decor;
         switch (chapter) {
             case 1: {
-                decor = "↟𐀛𐀗𐀂𐀭𐘃𖣂ᛉ";
+                decor = "↟ᛉ";
                 break;
             }
             case 2: {
@@ -660,8 +667,18 @@ public class Render {
             }
         }
 
-
-
+        for (int i = 0; i < 40; i++) {
+            int row = (int)(17 * Math.random());
+            int col = (int)(19 * Math.random());
+            char dec = decor.charAt((int)(decor.length() * Math.random()));
+            displayBuffer.get(row).setCharAt(col, dec);
+        }
+        for (int i = 0; i < 40; i++) {
+            int row = (int)(17 * Math.random());
+            int col = 42 + (int)(19 * Math.random());
+            char dec = decor.charAt((int)(decor.length() * Math.random()));
+            displayBuffer.get(row).setCharAt(col, dec);
+        }
     }
 
     /**
