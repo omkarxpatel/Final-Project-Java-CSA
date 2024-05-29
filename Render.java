@@ -542,8 +542,8 @@ public class Render {
         displayText("⚔", 15, 22, 1);
     }
 
-    public void displayMap(Map2 map) {
-
+    public void displayMap(Map map) {
+        
     }
 
     /**

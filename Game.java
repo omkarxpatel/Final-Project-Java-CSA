@@ -89,7 +89,7 @@ public class Game {
                     }
                     case "exitDeck": {
                         gotoScreen(3);
-
+                        render.displayMap(map);
                         break;
                     }
                 }
@@ -182,11 +182,6 @@ public class Game {
         Map m = new Map(1);
         Game game = new Game(b, p, m, r); // TODO
         String input = null;
-
-        m.initNodes();
-        m.randNodes();
-        m.getMap();
-        // display the map here or something
 
         game.flush();
         while (true) {
