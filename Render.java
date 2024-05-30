@@ -39,8 +39,8 @@ public class Render {
             "...........................┏┓┓┏┓┓┏...........................",
             "...........................┣┛┗┗┻┗┫...........................",
             ".............................................................",
-            ".............................................................",
-            ".............................................................",
+            "..........................A&D MOVE..........................",
+            "..........................S SELECT..........................",
             "-------------------------------------------------------------",
     };
     private static String[] screenDeck = new String[] {
@@ -490,13 +490,24 @@ public class Render {
      *               health, power, cost, and abilities.
      */
     public void displayCard(int posRow, int posCol, Card card) {
-        displayCard(posRow,
+        if (card == null) {
+            displayCard(posRow,
+                posCol,
+                null,
+                0,
+                0,
+                0,
+                null);
+        }
+        else {
+            displayCard(posRow,
                 posCol,
                 card.getName(),
                 card.getHealth(),
                 card.getPower(),
                 card.getCost(),
                 card.getAbilities());
+        }
     }
 
     /**
@@ -620,10 +631,9 @@ public class Render {
 
         if (progress < nodes.length - 1) {
             int width = Integer.parseInt(layouts[chapter - 1].charAt(progress + 1) + "");
-            CursorPosition[] newPositions = new CursorPosition[width];
+            CursorPosition[] newPositions = new CursorPosition[width + 1];
             switch (width) {
                 case 1: {
-
                     newPositions[0] = new CursorPosition(3,7,30, "node", null);
                     break;
                 }
@@ -639,6 +649,7 @@ public class Render {
                     break;
                 }
             }
+            newPositions[width] = new CursorPosition(3,6,2,"openDeck", null);
 
             cursorPairs[3] = newPositions;
         }
@@ -668,17 +679,19 @@ public class Render {
         }
 
         for (int i = 0; i < 40; i++) {
-            int row = (int)(17 * Math.random());
+            int row = 3 + (int)(14 * Math.random());
             int col = (int)(19 * Math.random());
             char dec = decor.charAt((int)(decor.length() * Math.random()));
             displayBuffer.get(row).setCharAt(col, dec);
         }
         for (int i = 0; i < 40; i++) {
-            int row = (int)(17 * Math.random());
+            int row = 3 + (int)(14 * Math.random());
             int col = 42 + (int)(19 * Math.random());
             char dec = decor.charAt((int)(decor.length() * Math.random()));
             displayBuffer.get(row).setCharAt(col, dec);
         }
+
+        displayBuffer.get(8).setCharAt(2, '<');
     }
 
     /**

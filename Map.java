@@ -34,7 +34,8 @@ public class Map {
             }
         }
         if (chapter == 1) {
-            
+            nodes[1][0] = new MapNode(1, "choice");
+            nodes[1][1] = new MapNode(1, "campfire");
         }
         nodes[nodes.length - 1][0] = new MapNode(chapter, "boss" + chapter, null);
     }

@@ -8,6 +8,8 @@ public class Game {
     private int screen;
     private int selected;
     private CursorPosition[] cursorPositions;
+    private String messageBuffer;
+    private boolean firstCampfire = true;
 
     public Game(Board board,
             Player player,
@@ -94,10 +96,37 @@ public class Game {
                         render.displayCursor(screen, selected);
                         break;
                     }
+                    case "openDeck": {
+                        gotoScreen(1);
+                        deckDrawCards();
+                        hoverAction();
+                        render.setLastCursorChar('─');
+                        break;
+                    }
+                    case "node": {
+                        openNode(selected);
+                    }
                 }
             }
             default:
                 break;
+        }
+    }
+
+    public void openNode(int selected) {
+        MapNode[][] nodes = map.getNodes();
+        int progress = map.getProgress();
+        int pos = map.getPos();
+        MapNode selectedNode = nodes[progress + 1][selected];
+        map.setProgress(progress + 1);
+        map.setPos(selected);
+        switch (selectedNode.event()) {
+            case ("campfire"): {
+                
+                if (firstCampfire) {
+                    firstCampfire = false;
+                }
+            }
         }
     }
 
