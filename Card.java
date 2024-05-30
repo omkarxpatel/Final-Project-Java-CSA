@@ -61,6 +61,14 @@ public class Card {
         cards.put("turkeyvulture", new Card("turkey vulture", 3, 3, 8, 2, (ArrayList<String>) airborne.clone()));
     }
 
+    static {
+        descriptions.put("stoat", "The nimble Stoat. Small but powerful.");
+        descriptions.put("wolf", "The proud Wolf. A vicious contender.");
+        descriptions.put("bullfrog", "The watchful Bullfrog. It leaps in the way of attacking flyers.");
+        descriptions.put("adder", "The caustic Adder. Damage from its poison bite is always lethal.");
+
+    }
+
     public Card(String name,
             int health,
             int power,

@@ -39,8 +39,8 @@ public class Render {
             "...........................┏┓┓┏┓┓┏...........................",
             "...........................┣┛┗┗┻┗┫...........................",
             ".............................................................",
-            "..........................A&D MOVE..........................",
-            "..........................S SELECT..........................",
+            "..........................A&D  MOVE..........................",
+            "..........................S  SELECT..........................",
             "-------------------------------------------------------------",
     };
     private static String[] screenDeck = new String[] {
@@ -53,6 +53,7 @@ public class Render {
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│....................................>",
+            "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
             "│......................│.....................................",
@@ -84,7 +85,7 @@ public class Render {
     private static String[] screenMap = new String[] {
             ".............................................................",
             ".............................................................",
-            ".............................................................",
+            "_____________________________________________________________",
             ".............................................................",
             ".............................................................",
             ".............................................................",
@@ -341,6 +342,17 @@ public class Render {
         displayBuffer.get(row).setCharAt(col, cursorChars[cursor]);
     }
 
+    public void displayMessage(String msg, int screen) {
+        if (screen == 1) {
+            fillChar(16,24,16,60,emptyChar);
+            displayText(msg, 16, 24, 36);
+        }
+        else {
+            fillChar(0, 0, 1, 60, emptyChar);
+            displayText(msg, 0, 0, 61);
+        }
+    }
+
     /**
      * The `loadScreen` function initializes a new display buffer with the content
      * of a specified
@@ -522,7 +534,7 @@ public class Render {
      *             name, cost, health, and power.
      */
     public void displayCardBig(Card card) {
-        fillChar(1, 1, 15, 22, emptyChar);
+        fillChar(1, 1, 16, 22, emptyChar);
         if (card == null) {
             return;
         }
@@ -545,11 +557,14 @@ public class Render {
             }
 
         }
-        displayText(card.getHealth() + "", 14, 1, 2);
-        displayText("♥", 15, 1, 1);
+        displayText(card.getHealth() + "", 15, 1, 2);
+        displayText("♥", 16, 1, 1);
 
-        displayText(card.getPower() + "", 14, 22, 2);
-        displayText("⚔", 15, 22, 1);
+        displayText(card.getPower() + "", 15, 22, 2);
+        displayText("⚔", 16, 22, 1);
+
+        String desc = Card.descriptions.get(card.getName());
+        displayText(desc.toUpperCase(), 3, 1, 22);
     }
 
     private void drawNode(int posRow, int posCol, String node) {

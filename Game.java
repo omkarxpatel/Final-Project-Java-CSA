@@ -8,7 +8,8 @@ public class Game {
     private int screen;
     private int selected;
     private CursorPosition[] cursorPositions;
-    private String messageBuffer;
+    private String messageBuffer = "";
+    private boolean firstNode = true;
     private boolean firstCampfire = true;
 
     public Game(Board board,
@@ -85,15 +86,31 @@ public class Game {
                         hoverAction();
                         render.setLastCursorChar('─');
                         render.displayText("STARTING DECK. ", 7, 25, 30);
-                        render.displayText("<HEALTH ", 14, 4, 30);
-                        render.displayText("POWER>", 15, 14, 30);
+                        render.displayText("<HEALTH ", 15, 4, 30);
+                        render.displayText("POWER>", 16, 14, 30);
+                        messageBuffer = "YOU WERE LOST DEEP IN THE FOREST... ";
+                        render.displayMessage(messageBuffer,screen);
                         break;
                     }
                     case "exitDeck": {
+                        if (firstNode) {
+                            switch (map.getChapter()) {
+                                case 1: {
+                                    messageBuffer = "The sun rose over the firs... Birds fluttered across the paths of beasts... You were embarking upon... the Woodlands.".toUpperCase();
+                                    break;
+                                }
+                                default: {
+                                    messageBuffer = "";
+                                    break;
+                                }
+                            }
+                            firstNode = false;
+                        }
                         gotoScreen(3);
                         render.displayMap(map);
                         cursorPositions = Render.cursorPairs[screen];
                         render.displayCursor(screen, selected);
+                        render.displayMessage(messageBuffer, screen);
                         break;
                     }
                     case "openDeck": {
