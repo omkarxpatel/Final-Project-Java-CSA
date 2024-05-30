@@ -85,7 +85,7 @@ public class Render {
     private static String[] screenMap = new String[] {
             ".............................................................",
             ".............................................................",
-            "_____________________________________________________________",
+            "─────────────────────────────────────────────────────────────",
             ".............................................................",
             ".............................................................",
             ".............................................................",
@@ -100,20 +100,50 @@ public class Render {
             ".............................................................",
             ".............................................................",
             ".............................................................",
+    };
+    private static String[] screenGeneric = new String[] {
+        ".............................................................",
+        "─────────────────────────────────────────────────────────────",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+        ".............................................................",
+    };
+    private static String[] screenBattle = new String[] {
+
     };
     private static String[][] screens = new String[][] {
             screenTitle,
             screenDeck,
             screenCredits,
-            screenMap
+            screenMap,
+            screenGeneric
     };
 
     public static CursorPosition[] cursorPositionsDeck = new CursorPosition[22];
     static {
-        for (int i = 0; i <= 20; i++) {
+        for (int i = 0; i < 21; i++) {
             cursorPositionsDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
         }
         cursorPositionsDeck[21] = new CursorPosition(1, 6, 60, "exitDeck", null);
+    }
+
+    public static CursorPosition[] cursorPositionsGeneric = new CursorPosition[21];
+    static {
+        for (int i = 0; i < 21; i++) {
+            cursorPositionsGeneric[i] = new CursorPosition(4, 2 + 5 * (i / 7), 9 + 7 * (i % 7), "chooseCardCampfire", null);
+        }
     }
     public static CursorPosition[][] cursorPairs = new CursorPosition[][] {
             {
@@ -126,7 +156,8 @@ public class Render {
             },
             {
                     new CursorPosition(3, 0, 0, "empty", null),
-            }
+            },
+            cursorPositionsGeneric,
     };
 
     public Render() {
@@ -343,13 +374,22 @@ public class Render {
     }
 
     public void displayMessage(String msg, int screen) {
-        if (screen == 1) {
-            fillChar(16,24,16,60,emptyChar);
-            displayText(msg, 16, 24, 36);
-        }
-        else {
-            fillChar(0, 0, 1, 60, emptyChar);
-            displayText(msg, 0, 0, 61);
+        switch (screen) {
+            case 1: {
+                fillChar(16,24,16,60,emptyChar);
+                displayText(msg, 16, 24, 36);
+                break;
+            }
+            case 4: {
+                fillChar(0, 0, 0, 60, emptyChar);
+                displayText(msg, 0, 0, 61);
+                break;
+            }
+            default: {
+                fillChar(0, 0, 0, 60, emptyChar);
+                displayText(msg, 0, 0, 61);
+                break;
+            }
         }
     }
 
@@ -453,6 +493,7 @@ public class Render {
             int health,
             int power,
             int cost,
+            int costType,
             ArrayList<String> abilities) {
         String line = displayBuffer.get(posRow).toString();
         line = replaceAt(posCol, posCol + 5, line, "┌───┐");
@@ -461,7 +502,9 @@ public class Render {
         line = displayBuffer.get(posRow + 1).toString();
         line = replaceAt(posCol, posCol + 5, line, "│ " +
                 (name == null || name.equals("") ? " " : Character.toUpperCase(name.charAt(0))) +
+                (costType == 2 ? "\u001B[4m" : "") + 
                 (cost == 0 ? " " : cost) +
+                (costType == 2 ? "\u001B[0m" : "") +
                 "│");
         displayBuffer.set(posRow + 1, new StringBuffer(line));
 
@@ -509,6 +552,7 @@ public class Render {
                 0,
                 0,
                 0,
+                0,
                 null);
         }
         else {
@@ -518,6 +562,7 @@ public class Render {
                 card.getHealth(),
                 card.getPower(),
                 card.getCost(),
+                card.getCostType(),
                 card.getAbilities());
         }
     }
@@ -565,6 +610,14 @@ public class Render {
 
         String desc = Card.descriptions.get(card.getName());
         displayText(desc.toUpperCase(), 3, 1, 22);
+
+        int i = 0;
+        if (card.getAbilities() != null) {
+            for (String s : card.getAbilities()) {
+                displayText(s.toUpperCase(), 10 + i, 1, 22);
+                i++;
+            }
+        }
     }
 
     private void drawNode(int posRow, int posCol, String node) {

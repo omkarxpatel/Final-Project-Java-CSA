@@ -13,6 +13,8 @@ public class Card {
     // "java.util.TreeMap.get(Object)" because "Map.cards" is null
     public static TreeMap<String, String> descriptions = new TreeMap<String, String>();
 
+    
+
     static {
         ArrayList<String> leap = new ArrayList<String>();
         leap.add("leap");
@@ -38,6 +40,8 @@ public class Card {
         manyLives.add("manylives");
         ArrayList<String> stinky = new ArrayList<String>();
         stinky.add("stinky");
+        ArrayList<String> unkillable = new ArrayList<String>();
+        unkillable.add("unkillable");
 
         cards.put("squirrel", new Card("squirrel", 1, 0, 0, 0, null));
         cards.put("adder", new Card("adder", 1, 1, 2, 1, (ArrayList<String>) deathTouch.clone()));
@@ -59,6 +63,9 @@ public class Card {
         cards.put("child13", new Card("child13", 1, 0, 1, 1, (ArrayList<String>) manyLives.clone()));
         cards.put("skunk", new Card("skunk", 0, 3, 1, 1, (ArrayList<String>) stinky.clone()));
         cards.put("turkeyvulture", new Card("turkey vulture", 3, 3, 8, 2, (ArrayList<String>) airborne.clone()));
+        cards.put("cockroach", new Card("cockroach", 1, 1, 4, 2, (ArrayList<String>) unkillable.clone()));
+        cards.put("ouroboros", new Card("ouroboros", 1, 1, 2, 1, (ArrayList<String>) unkillable.clone()));
+        cards.put("bat", new Card("bat", 2, 1, 4, 2, (ArrayList<String>) airborne.clone()));
     }
 
     static {
@@ -68,6 +75,22 @@ public class Card {
         descriptions.put("adder", "The caustic Adder. Damage from its poison bite is always lethal.");
 
     }
+
+    public static final Card[] CARDS_COMMON = new Card[] {
+        cards.get("stoat"),
+        cards.get("wolf"),
+        cards.get("cat"),
+        cards.get("beehive"),
+        cards.get("adder"),
+        cards.get("bat"),
+        cards.get("skunk"),
+        cards.get("ant"),
+        cards.get("bullfrog"),
+        cards.get("sparrow"),
+        cards.get("mantis"),
+        cards.get("coyote"),
+        cards.get("cockroach")
+    };
 
     public Card(String name,
             int health,
@@ -152,6 +175,19 @@ public class Card {
      */
     public void modifyHealth(int modifier) {
         health += modifier;
+    }
+
+    /**
+     * The `modifyPower` function in Java increases the power variable by the
+     * specified modifier.
+     * 
+     * @param modifier The `modifier` parameter in the `modifyPower` method is an
+     *                 integer value that is
+     *                 used to adjust the `power` variable by adding or subtracting
+     *                 its value.
+     */
+    public void modifyPower(int modifier) {
+        power += modifier;
     }
 
     /**

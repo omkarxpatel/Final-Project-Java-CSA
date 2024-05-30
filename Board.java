@@ -5,13 +5,14 @@ public class Board {
     private Stack<Card> deck;
     private Card[][] board;
     private Player currentPlayer;
-    private int bones = 0;
+    private int bones;
 
     public Board(Player currentPlayer1) {
         health = 0;
         board = new Card[3][4];
         currentPlayer = currentPlayer1;
         deck = shuffle(currentPlayer.getCards());
+        bones = 0; 
     }
 
     /**
@@ -121,7 +122,11 @@ public class Board {
 
                     for (Card c : targets) {
                         if (c == null || c.getHealth() <= 0) {
+                            if (c.getAbilities().contains("unkillable") && i == 1) {
+                                currentPlayer.addCards(c);
+                            }
                             c = null;
+                            bones++; 
                         }
                     }
                 }

@@ -10,7 +10,7 @@ public class Game {
     private CursorPosition[] cursorPositions;
     private String messageBuffer = "";
     private boolean firstNode = true;
-    private boolean firstCampfire = true;
+    private Card[] choiceBuffer;
 
     public Game(Board board,
             Player player,
@@ -122,6 +122,35 @@ public class Game {
                     }
                     case "node": {
                         openNode(selected);
+                        break;
+                    }
+                    case "chooseCardCampfire": {
+                        if (selected >= player.getCards().size()) {
+                            selected = 0;
+                            render.displayCursor(screen, selected);
+                            break;
+                        }
+                        if (Math.random() < 0.5) {
+                            player.getCards().get(selected).modifyHealth(2);
+                        }
+                        else {
+                            player.getCards().get(selected).modifyPower(1);
+                        }
+                        gotoScreen(3);
+                        render.displayMap(map);
+                        cursorPositions = Render.cursorPairs[screen];
+                        render.displayCursor(screen, selected);
+                        render.displayMessage(messageBuffer, screen);
+                        break;
+                    }
+                    case "chooseCardChoice": {
+                        player.addCards(choiceBuffer[selected]);
+                        gotoScreen(3);
+                        render.displayMap(map);
+                        cursorPositions = Render.cursorPairs[screen];
+                        render.displayCursor(screen, selected);
+                        render.displayMessage(messageBuffer, screen);
+                        break;
                     }
                 }
             }
@@ -139,10 +168,28 @@ public class Game {
         map.setPos(selected);
         switch (selectedNode.event()) {
             case ("campfire"): {
-                
-                if (firstCampfire) {
-                    firstCampfire = false;
+                CursorPosition[] cursorPositionsGeneric = new CursorPosition[21];
+                for (int i = 0; i < 21; i++) {
+                    cursorPositionsGeneric[i] = new CursorPosition(4, 2 + 5 * (i / 7), 9 + 7 * (i % 7), "chooseCardCampfire", null);
                 }
+                Render.cursorPairs[4] = cursorPositionsGeneric;
+                gotoScreen(4);
+                render.setLastCursorChar('─');
+                render.displayMessage("You came across a dim campfire.".toUpperCase(), 4);
+                campfireDrawCards();
+                break;
+            }
+            case ("choice"): {
+                CursorPosition[] cursorPositionsGeneric = new CursorPosition[3];
+                for (int i = 0; i < 3; i++) {
+                    cursorPositionsGeneric[i] = new CursorPosition(4, 7, 23 + 7 * (i % 7), "chooseCardChoice", null);
+                }
+                Render.cursorPairs[4] = cursorPositionsGeneric;
+                gotoScreen(4);
+                render.setLastCursorChar('─');
+                render.displayMessage("You came across a group of beasts. One may join your deck".toUpperCase(), 4);
+                choiceBuffer = choiceDrawCards();
+                break;
             }
         }
     }
@@ -171,9 +218,7 @@ public class Game {
     }
 
     /**
-     * The `deckDrawCards` function displays a player's cards on the screen in a row
-     * if the player has less
-     * than 7 cards.
+     * The `deckDrawCards` function displays a player's cards on the screen
      */
 
     public void deckDrawCards() {
@@ -186,6 +231,76 @@ public class Game {
                 col += 5;
             }
         }
+        else {
+            for (int i = 0; i < 7; i++) {
+                render.displayCard(1, col, cards.get(i));
+                col += 5;
+            }
+            col = 25;
+            if (cards.size() < 14) {
+                for (int i = 7; i < cards.size(); i++) {
+                    render.displayCard(6, col, cards.get(i));
+                    col += 5;
+                }
+            }
+            else {
+                for (int i = 7; i < 14; i++) {
+                    render.displayCard(6, col, cards.get(i));
+                    col += 5;
+                }
+                col = 25;
+                for (int i = 14; i < cards.size() && i < 21; i++) {
+                    render.displayCard(11, col, cards.get(i));
+                    col += 5;
+                }
+            }
+        }
+    }
+
+    public void campfireDrawCards() {
+        ArrayList<Card> cards = player.getCards();
+        int row = 3;
+        int col = 7;
+        if (cards.size() < 7) {
+            for (Card c : cards) {
+                render.displayCard(2, col, c);
+                col += 7;
+            }
+        }
+        else {
+            for (int i = 0; i < 7; i++) {
+                render.displayCard(2, col, cards.get(i));
+                col += 7;
+            }
+            col = 7;
+            if (cards.size() < 14) {
+                for (int i = 7; i < cards.size(); i++) {
+                    render.displayCard(7, col, cards.get(i));
+                    col += 7;
+                }
+            }
+            else {
+                for (int i = 7; i < 14; i++) {
+                    render.displayCard(12, col, cards.get(i));
+                    col += 7;
+                }
+                col = 7;
+                for (int i = 14; i < cards.size() && i < 21; i++) {
+                    render.displayCard(12, col, cards.get(i));
+                    col += 7;
+                }
+            }
+        }
+    }
+
+    private Card[] choiceDrawCards() {
+        Card[] cards = new Card[3];
+        Card[] cardPool = Card.CARDS_COMMON;
+        for (int i = 0; i < 3; i ++) {
+            cards[i] = cardPool[(int)(cardPool.length * Math.random())];
+            render.displayCard(7, 21 + 7 * i, cards[i]);
+        }
+        return cards;
     }
 
     /**
