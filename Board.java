@@ -7,8 +7,10 @@ public class Board {
     private Player currentPlayer;
     private int bones;
     private ArrayList<Card> hand;
+    private int turn = 0;
+    private int id = 0;
 
-    public Board(Player currentPlayer1) {
+    public Board(Player currentPlayer1, int id) {
         health = 0;
         board = new Card[3][4];
         currentPlayer = currentPlayer1;
@@ -18,6 +20,7 @@ public class Board {
         for (int i = 0; i < 3; i++) {
             hand.add(deck.pop());
         }
+        this.id = id;
     }
 
     /**

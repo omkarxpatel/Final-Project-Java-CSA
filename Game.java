@@ -14,6 +14,7 @@ public class Game {
     private boolean sacrificing = false;
     private int sacrificesNeeded = 0;
     private Card cardBuffer;
+    private int battlesWon = 0;
 
     public Game(Board board,
             Player player,
@@ -80,6 +81,7 @@ public class Game {
                     }
                     case "play": {
                         gotoScreen(1);
+                        battlesWon = 0;
                         player = new Player();
                         deckDrawCards();
                         hoverAction();
@@ -103,11 +105,7 @@ public class Game {
                             }
                             firstNode = false;
                         }
-                        gotoScreen(3);
-                        render.displayMap(map);
-                        cursorPositions = Render.cursorPairs[screen];
-                        render.displayCursor(screen, selected);
-                        render.displayMessage(messageBuffer, screen);
+                        openMap();
                         break;
                     }
                     case "openDeck": {
@@ -133,20 +131,12 @@ public class Game {
                         else {
                             player.getCards().get(selected).modifyPower(1);
                         }
-                        gotoScreen(3);
-                        render.displayMap(map);
-                        cursorPositions = Render.cursorPairs[screen];
-                        render.displayCursor(screen, selected);
-                        render.displayMessage(messageBuffer, screen);
+                        openMap();
                         break;
                     }
                     case "chooseCardChoice": {
                         player.addCards(choiceBuffer[selected]);
-                        gotoScreen(3);
-                        render.displayMap(map);
-                        cursorPositions = Render.cursorPairs[screen];
-                        render.displayCursor(screen, selected);
-                        render.displayMessage(messageBuffer, screen);
+                        openMap();
                         break;
                     }
                     case "openDeckBattle": {
@@ -211,13 +201,30 @@ public class Game {
                     }
                     case "battleBell": {
                         int result = board.update();
-                        if (result = )
+                        if (result == -1) {
+                            gotoScreen(0);
+                            render.displayText("LOST", 7, 29, 4);
+                            break;
+                        }
+                        if (result == 1) {
+                            openMap();
+                        }
+                        render.displayBoard(board);
+                        break;
                     }
                 }
             }
             default:
                 break;
         }
+    }
+
+    private void openMap() {
+        gotoScreen(3);
+        render.displayMap(map);
+        cursorPositions = Render.cursorPairs[screen];
+        render.displayCursor(screen, selected);
+        render.displayMessage(messageBuffer, screen);
     }
 
     public void openNode(int selected) {
@@ -254,7 +261,7 @@ public class Game {
             }
             case "battle": {
                 gotoScreen(5);
-                board = new Board(player);
+                board = new Board(player, battleID());
                 render.displayBoard(board);
                 render.setLastCursorChar('─');
                 break;
@@ -430,6 +437,11 @@ public class Game {
             render.displayCard(7, 21 + 7 * i, cards[i]);
         }
         return cards;
+    }
+
+    private static int battleID() {
+
+        return 0;
     }
 
     /**
