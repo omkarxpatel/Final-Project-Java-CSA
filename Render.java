@@ -121,14 +121,53 @@ public class Render {
         ".............................................................",
     };
     private static String[] screenBattle = new String[] {
-
+        "-------------------------------┌───┐-┌───┐-┌───┐-┌───┐-------",
+        "│......................│.......│   │.│   │.│   │.│   │.......",
+        "│......................│.......├───┤.├───┤.├───┤.├───┤.......",
+        "│......................│.│⚖│...│   │.│   │.│   │.│   │.......",
+        "│......................│.│-│...└───┘.└───┘.└───┘.└───┘.......",
+        "│......................│.│•│.................................",
+        "│......................│.│-│...┌───┐.┌───┐.┌───┐.┌───┐.......",
+        "│......................│.│•│...│   │.│   │.│   │.│   │.......",
+        "│......................│.>-│...├───┤.├───┤.├───┤.├───┤.......",
+        "│......................│.│•│...│   │.│   │.│   │.│   │.......",
+        "│......................│.│-│...└───┘.└───┘.└───┘.└───┘.......",
+        "│......................│.│•│..-------------------------......",
+        "│......................│.│-│...┌───┐.┌───┐.┌───┐.┌───┐.......",
+        "│......................│.│☠│...│   │.│   │.│   │.│   │.......",
+        "│......................│.......├───┤.├───┤.├───┤.├───┤.......",
+        "│......................│.......│   │.│   │.│   │.│   │.......",
+        "│......................│..✖....└───┘.└───┘.└───┘.└───┘.↓..✓..",
+        "-------------------------------------------------------------"
+    };
+    private static String[] screenBattleDeck = new String[] {
+        "-------------------------------------------------------------",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│....................................>",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "│......................│.....................................",
+        "-------------------------------------------------------------"
     };
     private static String[][] screens = new String[][] {
             screenTitle,
             screenDeck,
             screenCredits,
             screenMap,
-            screenGeneric
+            screenGeneric,
+            screenBattle,
+            screenBattleDeck
     };
 
     public static CursorPosition[] cursorPositionsDeck = new CursorPosition[22];
@@ -145,6 +184,29 @@ public class Render {
             cursorPositionsGeneric[i] = new CursorPosition(4, 2 + 5 * (i / 7), 9 + 7 * (i % 7), "chooseCardCampfire", null);
         }
     }
+
+    public static CursorPosition[] cursorPositionsBattle = new CursorPosition[14];
+    static {
+        for (int i = 0; i < 4; i++) {
+            cursorPositionsBattle[i] = new CursorPosition(5, 12, 33 + 6 * i, "chooseCardOnBoard", "showCardInBattle");
+        }
+        cursorPositionsBattle[4] = new CursorPosition(5, 15, 55, "openDeckBattle", null);
+        cursorPositionsBattle[5] = new CursorPosition(5, 15, 58, "battleBell", null);
+        for (int i = 6; i < 10; i++) {
+            cursorPositionsBattle[i] = new CursorPosition(5, 10, 33 + 6 * (i - 6), "empty", "showCardInBattle");
+        }
+        for (int i = 10; i < 14; i++) {
+            cursorPositionsBattle[i] = new CursorPosition(5, 4, 33 + 6 * (i - 10), "empty", "showCardInBattle");
+        }
+    }
+
+    public static CursorPosition[] cursorPositionsBattleDeck = new CursorPosition[22];
+    static {
+        for (int i = 0; i < 21; i++) {
+            cursorPositionsBattleDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "playCard", "showCardInDeck");
+        }
+        cursorPositionsBattleDeck[21] = new CursorPosition(1, 6, 60, "exitDeckBattle", null);
+    }
     public static CursorPosition[][] cursorPairs = new CursorPosition[][] {
             {
                     new CursorPosition(0, 8, 30, "play", null),
@@ -158,6 +220,8 @@ public class Render {
                     new CursorPosition(3, 0, 0, "empty", null),
             },
             cursorPositionsGeneric,
+            cursorPositionsBattle,
+            cursorPositionsBattleDeck
     };
 
     public Render() {
@@ -385,6 +449,11 @@ public class Render {
                 displayText(msg, 0, 0, 61);
                 break;
             }
+            case 6: {
+                fillChar(16,24,16,60,emptyChar);
+                displayText(msg, 16, 24, 36);
+                break;
+            }
             default: {
                 fillChar(0, 0, 0, 60, emptyChar);
                 displayText(msg, 0, 0, 61);
@@ -494,7 +563,8 @@ public class Render {
             int power,
             int cost,
             int costType,
-            ArrayList<String> abilities) {
+            ArrayList<String> abilities,
+            boolean ifNull) {
         String line = displayBuffer.get(posRow).toString();
         line = replaceAt(posCol, posCol + 5, line, "┌───┐");
         displayBuffer.set(posRow, new StringBuffer(line));
@@ -502,14 +572,12 @@ public class Render {
         line = displayBuffer.get(posRow + 1).toString();
         line = replaceAt(posCol, posCol + 5, line, "│ " +
                 (name == null || name.equals("") ? " " : Character.toUpperCase(name.charAt(0))) +
-                (costType == 2 ? "\u001B[4m" : "") + 
                 (cost == 0 ? " " : cost) +
-                (costType == 2 ? "\u001B[0m" : "") +
                 "│");
         displayBuffer.set(posRow + 1, new StringBuffer(line));
 
         line = displayBuffer.get(posRow + 2).toString();
-        line = replaceAt(posCol, posCol + 5, line, "├───┤");
+        line = replaceAt(posCol, posCol + 5, line, (ifNull ? "│   │" : "├───┤"));
         displayBuffer.set(posRow + 2, new StringBuffer(line));
 
         line = displayBuffer.get(posRow + 3).toString();
@@ -553,7 +621,8 @@ public class Render {
                 0,
                 0,
                 0,
-                null);
+                null,
+                true);
         }
         else {
             displayCard(posRow,
@@ -563,7 +632,8 @@ public class Render {
                 card.getPower(),
                 card.getCost(),
                 card.getCostType(),
-                card.getAbilities());
+                card.getAbilities(),
+                false);
         }
     }
 
@@ -609,7 +679,9 @@ public class Render {
         displayText("⚔", 16, 22, 1);
 
         String desc = Card.descriptions.get(card.getName());
-        displayText(desc.toUpperCase(), 3, 1, 22);
+        if (desc != null) {
+            displayText(desc.toUpperCase(), 3, 1, 22);
+        }
 
         int i = 0;
         if (card.getAbilities() != null) {
@@ -759,9 +831,22 @@ public class Render {
             displayBuffer.get(row).setCharAt(col, dec);
         }
 
+        fillChar(7, 1, 9, 3, emptyChar);
         displayBuffer.get(8).setCharAt(2, '<');
     }
 
+    public void displayBoard(Board board) {
+        Card[][] cards = board.getBoard();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                displayCard(12 - 6 * i, 31 + 6 * j, cards[i][j]);
+            }
+        }
+        fillChar(3, 25, 13, 25, '│');
+        displayBuffer.get(8 + board.getHealth()).setCharAt(25, '>');
+
+        displayText(Integer.toString(board.getBones()), 15, 26, 2);
+    }
     /**
      * The `flush` method creates a new array from the elements in `displayBuffer`,
      * converts them to

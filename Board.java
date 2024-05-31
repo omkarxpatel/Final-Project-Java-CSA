@@ -6,6 +6,7 @@ public class Board {
     private Card[][] board;
     private Player currentPlayer;
     private int bones;
+    private ArrayList<Card> hand;
 
     public Board(Player currentPlayer1) {
         health = 0;
@@ -13,6 +14,10 @@ public class Board {
         currentPlayer = currentPlayer1;
         deck = shuffle(currentPlayer.getCards());
         bones = 0; 
+        hand = new ArrayList<Card>();
+        for (int i = 0; i < 3; i++) {
+            hand.add(deck.pop());
+        }
     }
 
     /**
@@ -254,5 +259,25 @@ public class Board {
             }
         }
         changeBoard(0, location, new1);
+    }
+
+    public Card[][] getBoard() {
+        return board;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getBones() {
+        return bones;
+    }
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public void setBones(int i) {
+        bones = i;
     }
 }

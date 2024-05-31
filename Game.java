@@ -11,6 +11,9 @@ public class Game {
     private String messageBuffer = "";
     private boolean firstNode = true;
     private Card[] choiceBuffer;
+    private boolean sacrificing = false;
+    private int sacrificesNeeded = 0;
+    private Card cardBuffer;
 
     public Game(Board board,
             Player player,
@@ -77,17 +80,11 @@ public class Game {
                     }
                     case "play": {
                         gotoScreen(1);
-                        ArrayList<Card> initCards = new ArrayList<Card>();
-                        initCards.add(Card.cards.get("stoat"));
-                        initCards.add(Card.cards.get("wolf"));
-                        initCards.add(Card.cards.get("bullfrog"));
-                        player = new Player(initCards);
+                        player = new Player();
                         deckDrawCards();
                         hoverAction();
                         render.setLastCursorChar('─');
-                        render.displayText("STARTING DECK. ", 7, 25, 30);
-                        render.displayText("<HEALTH ", 15, 4, 30);
-                        render.displayText("POWER>", 16, 14, 30);
+                        render.displayCursor(screen,selected);
                         messageBuffer = "YOU WERE LOST DEEP IN THE FOREST... ";
                         render.displayMessage(messageBuffer,screen);
                         break;
@@ -152,6 +149,70 @@ public class Game {
                         render.displayMessage(messageBuffer, screen);
                         break;
                     }
+                    case "openDeckBattle": {
+                        gotoScreen(6);
+                        handDrawCards();
+                        hoverAction();
+                        render.setLastCursorChar('─');
+                        break;
+                    }
+                    case "exitDeckBattle": {
+                        gotoScreen(5);
+                        render.displayBoard(board);
+                        render.displayCursor(screen, selected);
+                        break;
+                    }
+                    case "chooseCardOnBoard": {
+                        if (cardBuffer != null && !sacrificing) {
+                            if (cardBuffer.getCostType() == 2) {
+                                board.setBones(board.getBones() - cardBuffer.getCost());
+                            }
+                            board.getBoard()[0][selected] = cardBuffer;
+                            cardBuffer = null;
+                            render.displayBoard(board);
+                            break;
+                        }
+                        if (sacrificing) {
+                            board.sacrifice(selected);
+                            sacrificesNeeded--;
+                            if (sacrificesNeeded <= 0) {
+                                sacrificing = false;
+                            }
+                            render.displayBoard(board);
+                        }
+                        break;
+                    }
+                    case "playCard": {
+                        if (selected < board.getHand().size()) {
+                            cardBuffer = board.getHand().get(selected);
+                            if (cardBuffer.getCostType() == 2 && board.getBones() < cardBuffer.getCost()) {
+                                render.displayMessage("NOT ENOUGH BONES", 6);
+                                break;
+                            }
+
+                            if (cardBuffer.getCostType() == 1) {
+                                sacrificing = true;
+                                sacrificesNeeded = cardBuffer.getCost();
+                            }
+                            else {
+                                sacrificing = false;
+                                sacrificesNeeded = 0;
+                            }
+
+                            if (sacrificing) {
+                                render.displayMessage("CARD SELECTED, " + cardBuffer.getCost() + " SACRIFICES NEEDED", 6);
+                            }
+                            else {
+                                render.displayMessage("CARD SELECTED", 6);
+                            }
+                            
+                        }
+                        
+                    }
+                    case "battleBell": {
+                        int result = board.update();
+                        if (result = )
+                    }
                 }
             }
             default:
@@ -167,7 +228,7 @@ public class Game {
         map.setProgress(progress + 1);
         map.setPos(selected);
         switch (selectedNode.event()) {
-            case ("campfire"): {
+            case "campfire": {
                 CursorPosition[] cursorPositionsGeneric = new CursorPosition[21];
                 for (int i = 0; i < 21; i++) {
                     cursorPositionsGeneric[i] = new CursorPosition(4, 2 + 5 * (i / 7), 9 + 7 * (i % 7), "chooseCardCampfire", null);
@@ -179,7 +240,7 @@ public class Game {
                 campfireDrawCards();
                 break;
             }
-            case ("choice"): {
+            case "choice": {
                 CursorPosition[] cursorPositionsGeneric = new CursorPosition[3];
                 for (int i = 0; i < 3; i++) {
                     cursorPositionsGeneric[i] = new CursorPosition(4, 7, 23 + 7 * (i % 7), "chooseCardChoice", null);
@@ -191,7 +252,15 @@ public class Game {
                 choiceBuffer = choiceDrawCards();
                 break;
             }
+            case "battle": {
+                gotoScreen(5);
+                board = new Board(player);
+                render.displayBoard(board);
+                render.setLastCursorChar('─');
+                break;
+            }
         }
+        render.displayCursor(screen, selected);
     }
 
     /**
@@ -206,13 +275,37 @@ public class Game {
             return;
         switch (action) {
             case "showCardInDeck": {
-                ArrayList<Card> deck = player.getCards();
+                ArrayList<Card> deck;
+                if (screen == 6) {
+                    deck = board.getHand();
+                }
+                else {
+                    deck = player.getCards();
+                }
+                
                 if (selected >= deck.size()) {
                     render.displayCardBig(null);
                 } else {
-                    render.displayCardBig(player.getCards().get(selected));
+                    render.displayCardBig(deck.get(selected));
                 }
-
+                break;
+            }
+            case "showCardInBattle": {
+                Card[][] b = board.getBoard();
+                if (selected <= 3) {
+                    render.displayCardBig(b[0][selected]);
+                    break;
+                }
+                if (selected >= 6 && selected <= 9) {
+                    render.displayCardBig(b[1][selected - 6]);
+                    break;
+                }
+                if (selected >= 10) {
+                    render.displayCardBig(b[2][selected - 10]);
+                    break;
+                }
+                render.displayCardBig(null);
+                break;
             }
         }
     }
@@ -223,6 +316,42 @@ public class Game {
 
     public void deckDrawCards() {
         ArrayList<Card> cards = player.getCards();
+        int row = 1;
+        int col = 25;
+        if (cards.size() < 7) {
+            for (Card c : cards) {
+                render.displayCard(1, col, c);
+                col += 5;
+            }
+        }
+        else {
+            for (int i = 0; i < 7; i++) {
+                render.displayCard(1, col, cards.get(i));
+                col += 5;
+            }
+            col = 25;
+            if (cards.size() < 14) {
+                for (int i = 7; i < cards.size(); i++) {
+                    render.displayCard(6, col, cards.get(i));
+                    col += 5;
+                }
+            }
+            else {
+                for (int i = 7; i < 14; i++) {
+                    render.displayCard(6, col, cards.get(i));
+                    col += 5;
+                }
+                col = 25;
+                for (int i = 14; i < cards.size() && i < 21; i++) {
+                    render.displayCard(11, col, cards.get(i));
+                    col += 5;
+                }
+            }
+        }
+    }
+
+    public void handDrawCards() {
+        ArrayList<Card> cards = board.getHand();
         int row = 1;
         int col = 25;
         if (cards.size() < 7) {
@@ -343,7 +472,7 @@ public class Game {
         Player p = new Player();
         Board b = new Board(p);
         Map m = new Map(1);
-        Game game = new Game(b, p, m, r); // TODO
+        Game game = new Game(b, p, m, r); 
         String input = null;
 
         int progress = m.getProgress();

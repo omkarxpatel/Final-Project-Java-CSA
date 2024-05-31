@@ -9,11 +9,7 @@ public class Card {
     private int costType;
     private ArrayList<String> abilities;
     public static TreeMap<String, Card> cards = new TreeMap<String, Card>();
-    // Caused by: java.lang.NullPointerException: Cannot invoke
-    // "java.util.TreeMap.get(Object)" because "Map.cards" is null
     public static TreeMap<String, String> descriptions = new TreeMap<String, String>();
-
-    
 
     static {
         ArrayList<String> leap = new ArrayList<String>();
