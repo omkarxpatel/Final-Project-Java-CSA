@@ -142,21 +142,21 @@ public class Render {
     };
     private static String[] screenBattleDeck = new String[] {
         "-------------------------------------------------------------",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
+        "│......................│....................................D",
+        "│......................│....................................┌",
+        "│......................│....................................│",
+        "│......................│....................................│",
+        "│......................│....................................│",
+        "│......................│....................................└",
         "│......................│.....................................",
         "│......................│....................................>",
         "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
-        "│......................│.....................................",
+        "│......................│....................................┌",
+        "│......................│....................................│",
+        "│......................│....................................│",
+        "│......................│....................................│",
+        "│......................│....................................└",
+        "│......................│....................................S",
         "│......................│.....................................",
         "-------------------------------------------------------------"
     };
@@ -200,12 +200,14 @@ public class Render {
         }
     }
 
-    public static CursorPosition[] cursorPositionsBattleDeck = new CursorPosition[22];
+    public static CursorPosition[] cursorPositionsBattleDeck = new CursorPosition[24];
     static {
         for (int i = 0; i < 21; i++) {
-            cursorPositionsBattleDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "playCard", "showCardInDeck");
+            cursorPositionsBattleDeck[i] = new CursorPosition(6, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "playCard", "showCardInDeck");
         }
-        cursorPositionsBattleDeck[21] = new CursorPosition(1, 6, 60, "exitDeckBattle", null);
+        cursorPositionsBattleDeck[21] = new CursorPosition(6, 6, 60, "exitDeckBattle", null);
+        cursorPositionsBattleDeck[22] = new CursorPosition(6, 4, 60, "drawFromDeck", null);
+        cursorPositionsBattleDeck[23] = new CursorPosition(6, 12, 60, "drawSquirrel", null);
     }
     public static CursorPosition[][] cursorPairs = new CursorPosition[][] {
             {
@@ -582,9 +584,9 @@ public class Render {
 
         line = displayBuffer.get(posRow + 3).toString();
         line = replaceAt(posCol, posCol + 5, line, "│" +
-                (health == 0 ? " " : health) +
-                (abilities == null || abilities.isEmpty() ? " " : abilities.get(0).substring(0, 1)) +
                 (power == 0 ? " " : power) +
+                (abilities == null || abilities.isEmpty() ? " " : abilities.get(0).substring(0, 1)) +
+                (health == 0 ? " " : health) +
                 "│");
         displayBuffer.set(posRow + 3, new StringBuffer(line));
 
@@ -672,11 +674,13 @@ public class Render {
             }
 
         }
-        displayText(card.getHealth() + "", 15, 1, 2);
-        displayText("♥", 16, 1, 1);
+        displayText(card.getPower() + "", 15, 1, 2);
+        displayText("⚔", 16, 1, 1);
 
-        displayText(card.getPower() + "", 15, 22, 2);
-        displayText("⚔", 16, 22, 1);
+        displayText(card.getHealth() + "", 15, 22, 2);
+        displayText("♥", 16, 22, 1);
+
+        
 
         String desc = Card.descriptions.get(card.getName());
         if (desc != null) {

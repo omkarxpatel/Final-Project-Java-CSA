@@ -212,7 +212,10 @@ public class Board {
      *                 that location on the board.
      */
     public void sacrifice(int location) {
-        board[0][location] = null;
+        if (!board[0][location].getAbilities().contains("manylives")) {
+            board[0][location] = null;
+        }
+        
     }
 
     public static void main(String[] args) {

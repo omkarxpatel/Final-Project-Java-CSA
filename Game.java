@@ -13,6 +13,8 @@ public class Game {
     private Card[] choiceBuffer;
     private boolean sacrificing = false;
     private int sacrificesNeeded = 0;
+    private ArrayList<Card> sacrificeBuffer = new ArrayList<Card>();
+    private boolean drawCard = true;
     private Card cardBuffer;
     private int battlesWon = 0;
 
@@ -162,17 +164,25 @@ public class Game {
                             render.displayBoard(board);
                             break;
                         }
-                        if (sacrificing) {
-                            board.sacrifice(selected);
-                            sacrificesNeeded--;
-                            if (sacrificesNeeded <= 0) {
-                                sacrificing = false;
-                            }
-                            render.displayBoard(board);
+                        if (sacrificing && 
+                            board.getBoard()[0][selected] != null &&
+                            !sacrificeBuffer.contains(board.getBoard()[0][selected])) {
+                                sacrificeBuffer.add(board.getBoard()[0][selected]);
+                                board.sacrifice(selected);
+                                sacrificesNeeded--;
+                                if (sacrificesNeeded <= 0) {
+                                    sacrificing = false;
+                                    sacrificeBuffer = new ArrayList<Card>();
+                                }
+                                render.displayBoard(board);
                         }
                         break;
                     }
                     case "playCard": {
+                        if (drawCard) {
+                            render.displayMessage("DRAW A CARD FIRST", 6);
+                            break;
+                        }
                         if (selected < board.getHand().size()) {
                             cardBuffer = board.getHand().get(selected);
                             if (cardBuffer.getCostType() == 2 && board.getBones() < cardBuffer.getCost()) {
@@ -197,9 +207,10 @@ public class Game {
                             }
                             
                         }
-                        
+                        break;
                     }
                     case "battleBell": {
+                        drawCard = true;
                         int result = board.update();
                         if (result == -1) {
                             gotoScreen(0);
@@ -208,6 +219,8 @@ public class Game {
                         }
                         if (result == 1) {
                             openMap();
+                            render.displayMessage("VICTORY", 3);
+                            break;
                         }
                         render.displayBoard(board);
                         break;
@@ -481,10 +494,8 @@ public class Game {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Render r = new Render();
-        Player p = new Player();
-        Board b = new Board(p);
         Map m = new Map(1);
-        Game game = new Game(b, p, m, r); 
+        Game game = new Game(null, null, m, r); 
         String input = null;
 
         int progress = m.getProgress();

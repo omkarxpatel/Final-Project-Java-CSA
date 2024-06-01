@@ -44,12 +44,12 @@ public class Card {
         cards.put("stoat", new Card("stoat", 2, 1, 1, 1, null));
         cards.put("wolf", new Card("wolf", 2, 3, 2, 1, null));
         cards.put("bullfrog", new Card("bullfrog", 2, 1, 1, 1, (ArrayList<String>) leap.clone()));
-        cards.put("sparrow", new Card("sparrow", 1, 2, 1, 1, (ArrayList<String>) airborne.clone()));
+        cards.put("sparrow", new Card("sparrow", 2, 1, 1, 1, (ArrayList<String>) airborne.clone()));
         cards.put("mantis", new Card("mantis", 1, 1, 1, 1, (ArrayList<String>) doubleStrike.clone()));
         cards.put("antqueen", new Card("ant queen", 3, 1, 2, 1, (ArrayList<String>) antSpawner.clone()));
         cards.get("antqueen").getAbilities().add("ant");
         cards.put("ant", new Card("ant", 2, 1, 1, 1, (ArrayList<String>) ant.clone()));
-        cards.put("beaver", new Card("beaver", 4, 1, 1, 2, (ArrayList<String>) damBuilder.clone()));
+        cards.put("beaver", new Card("beaver", 3, 1, 1, 2, (ArrayList<String>) damBuilder.clone()));
         cards.put("dam", new Card("dam", 2, 0, 0, 0, null));
         cards.put("bee", new Card("bee", 1, 1, 0, 0, (ArrayList<String>) airborne.clone()));
         cards.put("beehive", new Card("bee hive", 2, 0, 1, 1, (ArrayList<String>) beesWithin.clone()));
@@ -57,7 +57,7 @@ public class Card {
         cards.put("cat", new Card("cat", 1, 0, 1, 1, (ArrayList<String>) manyLives.clone()));
         cards.put("coyote", new Card("coyote", 2, 1, 4, 2, null));
         cards.put("child13", new Card("child13", 1, 0, 1, 1, (ArrayList<String>) manyLives.clone()));
-        cards.put("skunk", new Card("skunk", 0, 3, 1, 1, (ArrayList<String>) stinky.clone()));
+        cards.put("skunk", new Card("skunk", 3, 0, 1, 1, (ArrayList<String>) stinky.clone()));
         cards.put("turkeyvulture", new Card("turkey vulture", 3, 3, 8, 2, (ArrayList<String>) airborne.clone()));
         cards.put("cockroach", new Card("cockroach", 1, 1, 4, 2, (ArrayList<String>) unkillable.clone()));
         cards.put("ouroboros", new Card("ouroboros", 1, 1, 2, 1, (ArrayList<String>) unkillable.clone()));
