@@ -38,6 +38,8 @@ public class Card {
         stinky.add("stinky");
         ArrayList<String> unkillable = new ArrayList<String>();
         unkillable.add("unkillable");
+        ArrayList<String> fledgling = new ArrayList<String>();
+        unkillable.add("fledgling");
 
         cards.put("squirrel", new Card("squirrel", 1, 0, 0, 0, null));
         cards.put("adder", new Card("adder", 1, 1, 2, 1, (ArrayList<String>) deathTouch.clone()));
@@ -62,6 +64,7 @@ public class Card {
         cards.put("cockroach", new Card("cockroach", 1, 1, 4, 2, (ArrayList<String>) unkillable.clone()));
         cards.put("ouroboros", new Card("ouroboros", 1, 1, 2, 1, (ArrayList<String>) unkillable.clone()));
         cards.put("bat", new Card("bat", 2, 1, 4, 2, (ArrayList<String>) airborne.clone()));
+        cards.put("wolfcub", new Card("wolf cub", 1, 1, 1, 1, (ArrayList<String>) fledgling.clone()));
     }
 
     static {
@@ -205,10 +208,10 @@ public class Card {
      *         which contains the result
      *         of attacking each opponent card with the specified power.
      */
-    public int[] attackCard(Card[] opponents, int power) {
-        int[] rVals = new int[opponents.length];
-        for (int i = 0; i < opponents.length; i++) {
-            int r = attackCard(opponents[i], power);
+    public int[] attackCard(ArrayList<Card> opponents, int power) {
+        int[] rVals = new int[opponents.size()];
+        for (int i = 0; i < opponents.size(); i++) {
+            int r = attackCard(opponents.get(i), power);
             rVals[0] = r;
         }
         return rVals;
@@ -242,7 +245,9 @@ public class Card {
         }
 
         ArrayList<String> A = getAbilities();
+        if (A == null) A = new ArrayList<String>();
         ArrayList<String> opA = opponent.getAbilities();
+        if (opA == null) opA = new ArrayList<String>();
         if (A.contains("airborne")) {
             if (opA.contains("leap")) {
                 attack(opponent, power);

@@ -97,7 +97,7 @@ public class Game {
                         if (firstNode) {
                             switch (map.getChapter()) {
                                 case 1: {
-                                    messageBuffer = "The sun rose over the firs... Birds fluttered across the paths of beasts... You were embarking upon... the Woodlands.".toUpperCase();
+                                    messageBuffer = "THE WOODLANDS";
                                     break;
                                 }
                                 default: {
@@ -155,20 +155,28 @@ public class Game {
                         break;
                     }
                     case "chooseCardOnBoard": {
+                        if (selected > 5) {
+                            break;
+                        }
                         if (cardBuffer != null && !sacrificing) {
                             if (cardBuffer.getCostType() == 2) {
                                 board.setBones(board.getBones() - cardBuffer.getCost());
                             }
                             board.getBoard()[0][selected] = cardBuffer;
+                            board.getHand().remove(cardBuffer);
                             cardBuffer = null;
                             render.displayBoard(board);
                             break;
                         }
                         if (sacrificing && 
-                            board.getBoard()[0][selected] != null &&
                             !sacrificeBuffer.contains(board.getBoard()[0][selected])) {
+                                if (board.getBoard()[0][selected] == null) {
+                                    render.displayMessage("INVALID SACRIFICE", screen);
+                                    break;
+                                }
                                 sacrificeBuffer.add(board.getBoard()[0][selected]);
                                 board.sacrifice(selected);
+                                render.displayMessage("SACRIFICE MADE", screen);
                                 sacrificesNeeded--;
                                 if (sacrificesNeeded <= 0) {
                                     sacrificing = false;
@@ -185,8 +193,10 @@ public class Game {
                         }
                         if (selected < board.getHand().size()) {
                             cardBuffer = board.getHand().get(selected);
+
                             if (cardBuffer.getCostType() == 2 && board.getBones() < cardBuffer.getCost()) {
                                 render.displayMessage("NOT ENOUGH BONES", 6);
+                                cardBuffer = null;
                                 break;
                             }
 
@@ -220,9 +230,36 @@ public class Game {
                         if (result == 1) {
                             openMap();
                             render.displayMessage("VICTORY", 3);
+                            battlesWon++;
                             break;
                         }
                         render.displayBoard(board);
+                        break;
+                    }
+                    case "drawFromDeck": {
+                        if (!drawCard) {
+                            render.displayMessage("ALREADY DREW CARD", screen);
+                            break;
+                        }
+                        if (board.getDeck().isEmpty()) {
+                            render.displayMessage("NO MORE CARDS", screen);
+                            break;
+                        }
+                        drawCard = false;
+                        board.getHand().add(board.getDeck().pop());
+                        handDrawCards();
+                        render.displayMessage("CARD DRAWN", screen);
+                        break;
+                    }
+                    case "drawSquirrel": {
+                        if (!drawCard) {
+                            render.displayMessage("ALREADY DREW CARD", screen);
+                            break;
+                        }
+                        drawCard = false;
+                        board.getHand().add(Card.cards.get("squirrel"));
+                        handDrawCards();
+                        render.displayMessage("CARD DRAWN", screen);
                         break;
                     }
                 }
@@ -274,7 +311,7 @@ public class Game {
             }
             case "battle": {
                 gotoScreen(5);
-                board = new Board(player, battleID());
+                board = new Board(player, battlesWon);
                 render.displayBoard(board);
                 render.setLastCursorChar('─');
                 break;

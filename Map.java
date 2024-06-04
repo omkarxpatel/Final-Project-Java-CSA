@@ -4,14 +4,11 @@ public class Map {
     private int chapter;
     private int progress;
     private int pos;
-    public static final String[] LAYOUTS = new String[] {"1212321212321", "1132112113211", "122113112211", "131" };
+    public static final String[] LAYOUTS = new String[] {"1212121", "1132112113211", "122113112211", "131" };
     private MapNode[][] nodes;
     private static String[] nonBattleNodes = new String[] {
             "campfire",
             "choice",
-            "trial",
-            "altar",
-            "sacrifice"
     };
 
     public Map(int chapter) {

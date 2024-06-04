@@ -8,7 +8,15 @@ public class Board {
     private int bones;
     private ArrayList<Card> hand;
     private int turn = 0;
-    private int id = 0;
+    private int battleID = 0;
+    private TreeMap<String, Card> cards = Card.cards;
+
+    public static final String[][][] BATTLES = new String[][][] {
+        {{"coyote"}},
+        {{"wolf cub"}, {"bat"}},
+        {{"coyote", "bat"}},
+        {{}, {"grizzly"}}
+    };
 
     public Board(Player currentPlayer1, int id) {
         health = 0;
@@ -20,7 +28,19 @@ public class Board {
         for (int i = 0; i < 3; i++) {
             hand.add(deck.pop());
         }
-        this.id = id;
+        this.battleID = id;
+
+        String[] firstTurnCards = BATTLES[id][0];
+        if (firstTurnCards != null && !firstTurnCards[0].isEmpty()) {
+            ArrayList<Card> newCards = new ArrayList<Card>();
+            for (int i = 0; i < BATTLES[battleID][turn].length; i++) {
+                newCards.add(cards.get(BATTLES[battleID][turn][i]));
+            }
+            ArrayList<Integer> newPos = ncrex(4, newCards.size(), null);
+            for (int i = 0; i < newPos.size(); i++) {
+                board[2][newPos.get(i)] = newCards.get(i);
+            }
+        }
     }
 
     /**
@@ -40,10 +60,11 @@ public class Board {
      */
     public static Stack<Card> shuffle(ArrayList<Card> deck1) {
         int index = 0;
+        ArrayList<Card> deckCopy = new ArrayList<Card>(deck1);
         Stack<Card> returnDeck = new Stack<Card>();
-        while (!deck1.isEmpty()) {
-            index = (int) (Math.random() * deck1.size());
-            returnDeck.add(deck1.remove(index));
+        while (!deckCopy.isEmpty()) {
+            index = (int) (Math.random() * deckCopy.size());
+            returnDeck.add(deckCopy.remove(index));
         }
         return returnDeck;
     }
@@ -68,11 +89,13 @@ public class Board {
             for (int j = 0; j < board[0].length; j++) {
 
                 Card thisCard = board[i][j];
+                if (thisCard == null) continue;
                 Card lCard = j == 0 ? null : board[i][j - 1];
                 Card rCard = j == 3 ? null : board[i][j + 1];
                 Card oCard = board[1 - i][j];
                 Card loCard = j == 0 ? null : board[1 - i][j - 1];
                 Card roCard = j == 3 ? null : board[1 - i][j + 1];
+                
                 int count = 0;
                 int power = thisCard.getPower();
                 ArrayList<String> abilities = thisCard.getAbilities();
@@ -82,26 +105,32 @@ public class Board {
                 if (abilities.contains("antspawner")) {
                     count = 0;
                     for (int k = 0; k < 4; k++) {
-                        if (board[i][k].getAbilities().contains("ant")) {
+                        if (board[i][k].getAbilities() != null && board[i][k].getAbilities().contains("ant")) {
                             count++;
                         }
                     }
                     power += count - 1;
                 }
-                if (lCard != null && lCard.getAbilities().contains("alpha")) {
-                    power++;
+                if (lCard != null && 
+                    lCard.getAbilities() != null &&
+                    lCard.getAbilities().contains("alpha")) {
+                        power++;
                 }
-                if (rCard != null && rCard.getAbilities().contains("alpha")) {
-                    power++;
+                if (rCard != null && 
+                    rCard.getAbilities() != null &&
+                    rCard.getAbilities().contains("alpha")) {
+                        power++;
                 }
-                if (oCard != null && oCard.getAbilities().contains("stinky")) {
-                    power--;
+                if (oCard != null && 
+                    oCard.getAbilities() != null &&
+                    oCard.getAbilities().contains("stinky")) {
+                        power--;
                 }
 
                 if (thisCard != null) {
                     ArrayList<Card> targets = new ArrayList<Card>();
-                    boolean doublestrike = abilities.contains("doublestrike");
-                    boolean triplestrike = abilities.contains("triplestrike");
+                    boolean doublestrike = (abilities == null) ? false : abilities.contains("doublestrike");
+                    boolean triplestrike = (abilities == null) ? false : abilities.contains("triplestrike");
                     if (!doublestrike &&
                             !triplestrike) {
                         targets.add(oCard);
@@ -120,21 +149,29 @@ public class Board {
                                 targets.add(roCard);
                         }
                     }
-                    int[] results = board[i][j].attackCard((Card[]) targets.toArray(), power);
-                    if (oCard.getAbilities().contains("beeswithin")) {
-                        currentPlayer.addCards(Card.cards.get("bee"));
+                    int[] results = board[i][j].attackCard(targets, power);
+                    if (!(oCard == null) && 
+                        !(oCard.getAbilities() == null) &&
+                        oCard.getAbilities().contains("beeswithin")) {
+                            currentPlayer.addCards(Card.cards.get("bee"));
                     }
                     for (int r : results) {
-                        health += r;
+                        if (i == 0) health += r;
+                        else health -= r;
                     }
 
-                    for (Card c : targets) {
-                        if (c == null || c.getHealth() <= 0) {
-                            if (c.getAbilities().contains("unkillable") && i == 1) {
-                                currentPlayer.addCards(c);
+                    for (int k = 0; k < 2; k++) {
+                        for (int l = 0; l < 4; l++) {
+                            Card c = board[k][l];
+                            if (c != null && c.getHealth() <= 0) {
+                                if (!(c.getAbilities() == null) && 
+                                    c.getAbilities().contains("unkillable") && 
+                                    i == 1) {
+                                        currentPlayer.addCards(c);
+                                }
+                                board[k][l] = null;
+                                bones++; 
                             }
-                            c = null;
-                            bones++; 
                         }
                     }
                 }
@@ -145,15 +182,50 @@ public class Board {
                 if (health <= -5) {
                     return -1; // return to map
                 }
+                if (!(thisCard.getAbilities() == null) && thisCard.getAbilities().contains("fledgling")) {
+                    if (thisCard.getName().equals("wolf cub")) {
+                        board[i][j] = cards.get("wolf");
+                    }
+                    else {
+                        thisCard.modifyHealth(2);
+                        thisCard.modifyPower(1);
+                    }
+                    thisCard.getAbilities().remove("fledgling");
+                }
+            }
+            if (i == 0) {
+                for (int j = 0; j < board[0].length; j++) {
+                    if (board[1][j] == null && board[2][j] != null) {
+                        board[1][j] = board[2][j];
+                        board[2][j] = null;
+                    }
+                }
+                nextCards();
             }
         }
-        for (int j = 0; j < board[0].length; j++) {
-            if (board[1][j] == null && board[2][j] != null) {
-                board[1][j] = board[2][j];
-                board[2][j] = null;
-            }
-        }
+        
+
+        turn++;
         return 0;
+    }
+
+    private void nextCards() {
+        ArrayList<Integer> occupiedOList = new ArrayList<Integer>();
+        for (int i = 0; i < board[0].length; i++) {
+            if (board[2][i] != null) {
+                occupiedOList.add(i);
+            }
+        }
+        if (turn > 0 && turn < BATTLES[battleID].length && occupiedOList.size() < 4) {
+            ArrayList<Card> newCards = new ArrayList<Card>();
+            for (int i = 0; i < BATTLES[battleID][turn].length && newCards.size() < 4 - occupiedOList.size(); i++) {
+                newCards.add(cards.get(BATTLES[battleID][turn][i]));
+            }
+            ArrayList<Integer> newPos = ncrex(4, newCards.size(), occupiedOList);
+            for (int i = 0; i < newPos.size(); i++) {
+                board[2][newPos.get(i)] = newCards.get(i);
+            }
+        }
     }
 
     // location is index in the array, 0 for very last and 4 for last
@@ -212,13 +284,10 @@ public class Board {
      *                 that location on the board.
      */
     public void sacrifice(int location) {
-        if (!board[0][location].getAbilities().contains("manylives")) {
+        Card sac = board[0][location];
+        if (sac.getAbilities() == null || !sac.getAbilities().contains("manylives")) {
             board[0][location] = null;
         }
-        
-    }
-
-    public static void main(String[] args) {
     }
 
     /**
@@ -283,7 +352,25 @@ public class Board {
         return hand;
     }
 
+    public Stack<Card> getDeck() {
+        return deck;
+    }
+
     public void setBones(int i) {
         bones = i;
+    }
+
+    private static ArrayList<Integer> ncrex(int n, int r, List<Integer> e) {
+        int i = 0;
+        int rand = (int)(n * Math.random());
+        ArrayList<Integer> out = new ArrayList<Integer>();
+        while (i < r) {
+            while (out.contains(rand) && (e == null || !e.contains(rand))) {
+                rand = (int)(n * Math.random());
+            }
+            out.add(rand);
+            i++;
+        }
+        return out;
     }
 }

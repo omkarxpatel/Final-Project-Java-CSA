@@ -175,7 +175,7 @@ public class Render {
         for (int i = 0; i < 21; i++) {
             cursorPositionsDeck[i] = new CursorPosition(1, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "card", "showCardInDeck");
         }
-        cursorPositionsDeck[21] = new CursorPosition(1, 6, 60, "exitDeck", null);
+        cursorPositionsDeck[21] = new CursorPosition(1, 7, 60, "exitDeck", null);
     }
 
     public static CursorPosition[] cursorPositionsGeneric = new CursorPosition[21];
@@ -205,7 +205,7 @@ public class Render {
         for (int i = 0; i < 21; i++) {
             cursorPositionsBattleDeck[i] = new CursorPosition(6, 1 + 5 * (i / 7), 27 + 5 * (i % 7), "playCard", "showCardInDeck");
         }
-        cursorPositionsBattleDeck[21] = new CursorPosition(6, 6, 60, "exitDeckBattle", null);
+        cursorPositionsBattleDeck[21] = new CursorPosition(6, 7, 60, "exitDeckBattle", null);
         cursorPositionsBattleDeck[22] = new CursorPosition(6, 4, 60, "drawFromDeck", null);
         cursorPositionsBattleDeck[23] = new CursorPosition(6, 12, 60, "drawSquirrel", null);
     }
@@ -449,6 +449,11 @@ public class Render {
             case 4: {
                 fillChar(0, 0, 0, 60, emptyChar);
                 displayText(msg, 0, 0, 61);
+                break;
+            }
+            case 5: {
+                fillChar(1, 1, 16, 22, emptyChar);
+                displayText(msg, 1, 1, 21);
                 break;
             }
             case 6: {
@@ -729,6 +734,10 @@ public class Render {
                 nodeChar = '⚖';
                 break;
             }
+            case "boss1": {
+                nodeChar = '⚖';
+                break;
+            }
         }
 
 
@@ -847,7 +856,7 @@ public class Render {
             }
         }
         fillChar(3, 25, 13, 25, '│');
-        displayBuffer.get(8 + board.getHealth()).setCharAt(25, '>');
+        displayBuffer.get(8 - board.getHealth()).setCharAt(25, '>');
 
         displayText(Integer.toString(board.getBones()), 15, 26, 2);
     }
