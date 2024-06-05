@@ -302,7 +302,9 @@ public class Card {
         if (ability.equals("Insta Kill")) {
             attackCard(opponent, opponent.getHealth());
         }
-
     }
 
+    public Card clone() {
+        return new Card(name, health, power, cost, costType, abilities);
+    }
 }

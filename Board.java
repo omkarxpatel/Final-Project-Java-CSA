@@ -34,7 +34,7 @@ public class Board {
         if (firstTurnCards != null && !firstTurnCards[0].isEmpty()) {
             ArrayList<Card> newCards = new ArrayList<Card>();
             for (int i = 0; i < BATTLES[battleID][turn].length; i++) {
-                newCards.add(cards.get(BATTLES[battleID][turn][i]));
+                newCards.add(cards.get(BATTLES[battleID][turn][i]).clone());
             }
             ArrayList<Integer> newPos = ncrex(4, newCards.size(), null);
             for (int i = 0; i < newPos.size(); i++) {
@@ -87,7 +87,6 @@ public class Board {
     public int update() {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < board[0].length; j++) {
-
                 Card thisCard = board[i][j];
                 if (thisCard == null) continue;
                 Card lCard = j == 0 ? null : board[i][j - 1];
